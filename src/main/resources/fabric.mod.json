@@ -3,13 +3,13 @@
 	"id": "coppernetworks",
 	"version": "${version}",
 	"name": "CopperNetworks",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "The basis of mods that use copper as wires to transport power",
 	"authors": [
-		"Me!"
+		"Entity 0"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/Ilikepinapples/coppernetworks",
+		"sources": "https://github.com/Ilikepinapples/coppernetworks"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/coppernetworks/icon.png",
@@ -29,6 +29,5 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
 	}
 }
