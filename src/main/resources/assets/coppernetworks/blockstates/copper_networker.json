@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "storage=false": {
+      "model": "coppernetworks:block/copper_networker"
+    },
+    "storage=true": {
+      "model": "coppernetworks:block/copper_networker_storage"
+    }
+  }
+}

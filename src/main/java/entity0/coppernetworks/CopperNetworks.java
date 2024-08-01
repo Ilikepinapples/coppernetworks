@@ -3,6 +3,10 @@ package entity0.coppernetworks;
 import entity0.coppernetworks.blockentity.ModBlockEntity;
 import net.fabricmc.api.ModInitializer;
 
+import net.minecraft.block.Block;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,5 +25,8 @@ public class CopperNetworks implements ModInitializer {
 		ModBlocks.initializeCategory();
 		LOGGER.info("Copper shall now attempt to network.");
 		ModBlockEntity.registerBlockEntities();
+	}
+	public class ModBlockTags {
+		public static final TagKey<Block> CONDUCTIVE = TagKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "conductive"));
 	}
 }

@@ -22,8 +22,10 @@ public class ModBlocks {
 
 
     public static final Block COPPER_NETWORKER = register(
-            new NetworkerBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.COPPER)),
-            "copper_networker"
+            new NetworkerBlock(AbstractBlock.Settings.create()
+                    .sounds(BlockSoundGroup.COPPER)
+                    .luminance(NetworkerBlock::getLuminance)
+            ), "copper_networker"
     );
     public static void initializeCategory() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.REDSTONE).register((itemGroup) -> {
