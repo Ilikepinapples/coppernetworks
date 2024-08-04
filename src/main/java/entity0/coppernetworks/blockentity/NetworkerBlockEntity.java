@@ -1,36 +1,24 @@
 package entity0.coppernetworks.blockentity;
 
-import com.mojang.datafixers.types.templates.Tag;
+import entity0.coppernetworks.copperNetworkPowerAPI;
 import entity0.coppernetworks.CopperNetworks;
-import entity0.coppernetworks.ModBlocks;
-import entity0.coppernetworks.NetworkerBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.Oxidizable;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.logging.Logger;
 
 import static entity0.coppernetworks.NetworkerBlock.STORAGE;
 
 public class NetworkerBlockEntity extends BlockEntity {
     long timePlaced;
     boolean placed;
-    long power;
+    long[] power = {0};
     public NetworkerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntity.COPPER_NETWORKER_BLOCKENTITY, pos, state);
     }
@@ -123,57 +111,100 @@ public class NetworkerBlockEntity extends BlockEntity {
             for (BlockPos networkpos : overallblocks) {
                 if ((!networkpos.up().equals(pos)) && ((world.getBlockEntity(networkpos.up())) instanceof NetworkerBlockEntity networkerBlockEntity) && (!world.getBlockState(networkpos.up()).get(STORAGE)) && networkerBlockEntity.timePlaced >= blockEntity.timePlaced) {
                     world.setBlockState(networkpos.up(), state.with(STORAGE, true));
+                    blockEntity.power[0] = blockEntity.power[0] + networkerBlockEntity.power[0];
+                    networkerBlockEntity.power[0] = 0;
+                    networkerBlockEntity.markDirty();
                 }
                 if ((!networkpos.down().equals(pos)) && ((world.getBlockEntity(networkpos.down())) instanceof NetworkerBlockEntity networkerBlockEntity) && (!world.getBlockState(networkpos.down()).get(STORAGE)) && networkerBlockEntity.timePlaced >= blockEntity.timePlaced) {
                     world.setBlockState(networkpos.down(), state.with(STORAGE, true));
+                    blockEntity.power[0] = blockEntity.power[0] + networkerBlockEntity.power[0];
+                    networkerBlockEntity.power[0] = 0;
+                    networkerBlockEntity.markDirty();
                 }
                 if ((!networkpos.north().equals(pos)) && ((world.getBlockEntity(networkpos.north())) instanceof NetworkerBlockEntity networkerBlockEntity) && (!world.getBlockState(networkpos.north()).get(STORAGE)) && networkerBlockEntity.timePlaced >= blockEntity.timePlaced) {
                     world.setBlockState(networkpos.north(), state.with(STORAGE, true));
+                    blockEntity.power[0] = blockEntity.power[0] + networkerBlockEntity.power[0];
+                    networkerBlockEntity.power[0] = 0;
+                    networkerBlockEntity.markDirty();
                 }
                 if ((!networkpos.south().equals(pos)) && ((world.getBlockEntity(networkpos.south())) instanceof NetworkerBlockEntity networkerBlockEntity) && (!world.getBlockState(networkpos.south()).get(STORAGE)) && networkerBlockEntity.timePlaced >= blockEntity.timePlaced) {
                     world.setBlockState(networkpos.south(), state.with(STORAGE, true));
+                    blockEntity.power[0] = blockEntity.power[0] + networkerBlockEntity.power[0];
+                    networkerBlockEntity.power[0] = 0;
+                    networkerBlockEntity.markDirty();
                 }
                 if ((!networkpos.east().equals(pos)) && ((world.getBlockEntity(networkpos.east())) instanceof NetworkerBlockEntity networkerBlockEntity) && (!world.getBlockState(networkpos.east()).get(STORAGE)) && networkerBlockEntity.timePlaced >= blockEntity.timePlaced) {
                     world.setBlockState(networkpos.east(), state.with(STORAGE, true));
+                    blockEntity.power[0] = blockEntity.power[0] + networkerBlockEntity.power[0];
+                    networkerBlockEntity.power[0] = 0;
+                    networkerBlockEntity.markDirty();
                 }
                 if ((!networkpos.west().equals(pos)) && ((world.getBlockEntity(networkpos.west())) instanceof NetworkerBlockEntity networkerBlockEntity) && (!world.getBlockState(networkpos.west()).get(STORAGE)) && networkerBlockEntity.timePlaced >= blockEntity.timePlaced) {
                     world.setBlockState(networkpos.west(), state.with(STORAGE, true));
+                    blockEntity.power[0] = blockEntity.power[0] + networkerBlockEntity.power[0];
+                    networkerBlockEntity.power[0] = 0;
+                    networkerBlockEntity.markDirty();
                 }
-                if (blockEntity.power >= 1 && world.getBlockState(networkpos.up()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.up()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.up()).getBlock()))) {
+                if (blockEntity.power[0] >= 1 && world.getBlockState(networkpos.up()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.up()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.up()).getBlock()))) {
                     Oxidizable.getDecreasedOxidationState(world.getBlockState(networkpos.up())).ifPresent(oxistate -> world.setBlockState(networkpos.up(), oxistate));
                     world.syncWorldEvent(WorldEvents.ELECTRICITY_SPARKS, networkpos.up(), -1);
-                    blockEntity.power = blockEntity.power - 1;
+                    blockEntity.power[0] = blockEntity.power[0] - 1;
                     markDirty(world, pos, state);
                 }
-                if (blockEntity.power >= 1 && world.getBlockState(networkpos.down()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.down()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.down()).getBlock()))) {
+                if (blockEntity.power[0] >= 1 && world.getBlockState(networkpos.down()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.down()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.down()).getBlock()))) {
                     Oxidizable.getDecreasedOxidationState(world.getBlockState(networkpos.down())).ifPresent(oxistate -> world.setBlockState(networkpos.down(), oxistate));
                     world.syncWorldEvent(WorldEvents.ELECTRICITY_SPARKS, networkpos.down(), -1);
-                    blockEntity.power = blockEntity.power - 1;
+                    blockEntity.power[0] = blockEntity.power[0] - 1;
                     markDirty(world, pos, state);
                 }
-                if (blockEntity.power >= 1 && world.getBlockState(networkpos.north()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.north()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.north()).getBlock()))) {
+                if (blockEntity.power[0] >= 1 && world.getBlockState(networkpos.north()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.north()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.north()).getBlock()))) {
                     Oxidizable.getDecreasedOxidationState(world.getBlockState(networkpos.north())).ifPresent(oxistate -> world.setBlockState(networkpos.north(), oxistate));
                     world.syncWorldEvent(WorldEvents.ELECTRICITY_SPARKS, networkpos.north(), -1);
-                    blockEntity.power = blockEntity.power - 1;
+                    blockEntity.power[0] = blockEntity.power[0] - 1;
                     markDirty(world, pos, state);
                 }
-                if (blockEntity.power >= 1 && world.getBlockState(networkpos.south()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.south()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.south()).getBlock()))) {
+                if (blockEntity.power[0] >= 1 && world.getBlockState(networkpos.south()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.south()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.south()).getBlock()))) {
                     Oxidizable.getDecreasedOxidationState(world.getBlockState(networkpos.south())).ifPresent(oxistate -> world.setBlockState(networkpos.south(), oxistate));
                     world.syncWorldEvent(WorldEvents.ELECTRICITY_SPARKS, networkpos.south(), -1);
-                    blockEntity.power = blockEntity.power - 1;
+                    blockEntity.power[0] = blockEntity.power[0] - 1;
                     markDirty(world, pos, state);
                 }
-                if (blockEntity.power >= 1 && world.getBlockState(networkpos.east()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.east()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.east()).getBlock()))) {
+                if (blockEntity.power[0] >= 1 && world.getBlockState(networkpos.east()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.east()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.east()).getBlock()))) {
                     Oxidizable.getDecreasedOxidationState(world.getBlockState(networkpos.east())).ifPresent(oxistate -> world.setBlockState(networkpos.east(), oxistate));
                     world.syncWorldEvent(WorldEvents.ELECTRICITY_SPARKS, networkpos.east(), -1);
-                    blockEntity.power = blockEntity.power - 1;
+                    blockEntity.power[0] = blockEntity.power[0] - 1;
                     markDirty(world, pos, state);
                 }
-                if (blockEntity.power >= 1 && world.getBlockState(networkpos.west()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.west()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.west()).getBlock()))) {
+                if (blockEntity.power[0] >= 1 && world.getBlockState(networkpos.west()).getBlock() instanceof Oxidizable && (world.getBlockState(networkpos.west()).getBlock() != Oxidizable.getUnaffectedOxidationBlock(world.getBlockState(networkpos.west()).getBlock()))) {
                     Oxidizable.getDecreasedOxidationState(world.getBlockState(networkpos.west())).ifPresent(oxistate -> world.setBlockState(networkpos.west(), oxistate));
                     world.syncWorldEvent(WorldEvents.ELECTRICITY_SPARKS, networkpos.west(), -1);
-                    blockEntity.power = blockEntity.power - 1;
+                    blockEntity.power[0] = blockEntity.power[0] - 1;
                     markDirty(world, pos, state);
+                }
+                /////////////////////////////////////
+                if (world.getBlockEntity(networkpos.up()) instanceof copperNetworkPowerAPI) {
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.up())).copperNetworkAPI.networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.up())).copperNetworkAPI.networkMaxPower = maxPower;
+                }
+                if (world.getBlockEntity(networkpos.down()) instanceof copperNetworkPowerAPI) {
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.down())).copperNetworkAPI.networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.down())).copperNetworkAPI.networkMaxPower = maxPower;
+                }
+                if (world.getBlockEntity(networkpos.north()) instanceof copperNetworkPowerAPI) {
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.north())).copperNetworkAPI.networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.north())).copperNetworkAPI.networkMaxPower = maxPower;
+                }
+                if (world.getBlockEntity(networkpos.south()) instanceof copperNetworkPowerAPI) {
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.south())).copperNetworkAPI.networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.south())).copperNetworkAPI.networkMaxPower = maxPower;
+                }
+                if (world.getBlockEntity(networkpos.east()) instanceof copperNetworkPowerAPI) {
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.east())).copperNetworkAPI.networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.east())).copperNetworkAPI.networkMaxPower = maxPower;
+                }
+                if (world.getBlockEntity(networkpos.west()) instanceof copperNetworkPowerAPI) {
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.west())).copperNetworkAPI.networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.west())).copperNetworkAPI.networkMaxPower = maxPower;
                 }
 
 
@@ -197,7 +228,7 @@ public class NetworkerBlockEntity extends BlockEntity {
     @Override
     public void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapper) {
         nbt.putLong("TimePlaced", timePlaced);
-        nbt.putLong("Power", power);
+        nbt.putLong("Power", power[0]);
         nbt.putBoolean("placed", placed);
         super.writeNbt(nbt, wrapper);
     }
@@ -206,7 +237,7 @@ public class NetworkerBlockEntity extends BlockEntity {
         super.readNbt(nbt, wrapper);
         timePlaced = nbt.getLong("TimePlaced");
         placed = nbt.getBoolean("placed");
-        power = nbt.getLong("Power");
+        power[0] = nbt.getLong("Power");
     }
     //        if (world.isClient()){
     //    return;
