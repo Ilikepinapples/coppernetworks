@@ -3,6 +3,7 @@ package entity0.coppernetworks;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.MapColor;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
@@ -25,6 +26,9 @@ public class ModBlocks {
             new NetworkerBlock(AbstractBlock.Settings.create()
                     .sounds(BlockSoundGroup.COPPER)
                     .luminance(NetworkerBlock::getLuminance)
+                    .mapColor(MapColor.ORANGE)
+                    .requiresTool()
+                    .strength(3.0F, 6.0F)
             ), "copper_networker"
     );
     public static void initializeCategory() {

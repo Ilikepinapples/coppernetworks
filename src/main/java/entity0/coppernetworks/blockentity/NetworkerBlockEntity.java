@@ -4,6 +4,8 @@ import entity0.coppernetworks.copperNetworkPowerAPI;
 import entity0.coppernetworks.CopperNetworks;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.ComponentType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
@@ -239,7 +241,9 @@ public class NetworkerBlockEntity extends BlockEntity {
         placed = nbt.getBoolean("placed");
         power[0] = nbt.getLong("Power");
     }
+
     //        if (world.isClient()){
     //    return;
     //}
 }
+//make this save power when dropped
