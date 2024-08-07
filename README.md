@@ -4,3 +4,5 @@ This is primarily a power api for my (and other's) mods to be built on top of. I
 This mod was only recently finished and will likely require future optimisations and language translations outside of English. Contributions on the Github would be greatly appreciated.
 
 Inspired by What Could Minecraft Copper Do? (https://www.youtube.com/watch?v=Tpm3yx1FFqo&ab_channel=SimplySarc) by SimplySarc.
+
+Thank you to those within the Fabric Modding Discord who dealt with my often rambling and poorly phrased questions.
