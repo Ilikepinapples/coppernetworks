@@ -6,3 +6,5 @@ This mod was only recently finished and will likely require future optimisations
 Inspired by What Could Minecraft Copper Do? (https://www.youtube.com/watch?v=Tpm3yx1FFqo&ab_channel=SimplySarc) by SimplySarc.
 
 Thank you to those within the Fabric Modding Discord who dealt with my often rambling and poorly phrased questions.
+
+Also thank you to ItsMinceraft for taking my rambling and unorganised notes of mod ideas and turning them into a Miro board that is actually readable.
