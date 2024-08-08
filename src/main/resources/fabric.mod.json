@@ -12,7 +12,7 @@
 		"sources": "https://github.com/Ilikepinapples/coppernetworks"
 	},
 	"license": "LGPL-3.0",
-	"icon": "assets/coppernetworks/icon.png",
+	"icon": "assets/coppernetworks/textures/block/powerednetworker.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
