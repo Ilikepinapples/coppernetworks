@@ -3,7 +3,7 @@ package entity0.coppernetworks;
 
 public class CopperNetworkPowerClass {
     public long networkMaxPower;
-    public long[] networkPower = new long[]{0};
+    public long[] networkPower;
     public boolean canConsume(long consumePower) {
         return consumePower <= networkPower[0];
     }
