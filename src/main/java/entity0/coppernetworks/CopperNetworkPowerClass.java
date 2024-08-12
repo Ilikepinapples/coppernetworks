@@ -1,12 +1,9 @@
 package entity0.coppernetworks;
 
 
-import net.minecraft.block.Block;
-
 public class CopperNetworkPowerClass {
     public long networkMaxPower;
-    public long[] networkPower;
-
+    public long[] networkPower = new long[]{0};
     public boolean canConsume(long consumePower) {
         return consumePower <= networkPower[0];
     }
