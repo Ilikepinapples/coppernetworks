@@ -185,28 +185,29 @@ public class NetworkerBlockEntity extends BlockEntity {
                 }
                 /////////////////////////////////////
                 if (world.getBlockEntity(networkpos.up()) instanceof copperNetworkPowerAPI) {
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.up())).copperNetworkAPI.networkPower = blockEntity.power;
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.up())).copperNetworkAPI.networkMaxPower = maxPower;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.up())).copperNetworkAPI().networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.up())).copperNetworkAPI().networkMaxPower = maxPower;
                 }
                 if (world.getBlockEntity(networkpos.down()) instanceof copperNetworkPowerAPI) {
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.down())).copperNetworkAPI.networkPower = blockEntity.power;
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.down())).copperNetworkAPI.networkMaxPower = maxPower;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.down())).copperNetworkAPI().networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.down())).copperNetworkAPI().networkMaxPower = maxPower;
                 }
                 if (world.getBlockEntity(networkpos.north()) instanceof copperNetworkPowerAPI) {
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.north())).copperNetworkAPI.networkPower = blockEntity.power;
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.north())).copperNetworkAPI.networkMaxPower = maxPower;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.north())).copperNetworkAPI().networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.north())).copperNetworkAPI().networkMaxPower = maxPower;
                 }
                 if (world.getBlockEntity(networkpos.south()) instanceof copperNetworkPowerAPI) {
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.south())).copperNetworkAPI.networkPower = blockEntity.power;
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.south())).copperNetworkAPI.networkMaxPower = maxPower;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.south())).copperNetworkAPI().networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.south())).copperNetworkAPI().networkMaxPower = maxPower;
                 }
                 if (world.getBlockEntity(networkpos.east()) instanceof copperNetworkPowerAPI) {
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.east())).copperNetworkAPI.networkPower = blockEntity.power;
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.east())).copperNetworkAPI.networkMaxPower = maxPower;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.east())).copperNetworkAPI().networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.east())).copperNetworkAPI().networkMaxPower = maxPower;
                 }
                 if (world.getBlockEntity(networkpos.west()) instanceof copperNetworkPowerAPI) {
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.west())).copperNetworkAPI.networkPower = blockEntity.power;
-                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.west())).copperNetworkAPI.networkMaxPower = maxPower;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.west())).copperNetworkAPI().networkPower = blockEntity.power;
+                    ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.west())).copperNetworkAPI().networkMaxPower = maxPower;
+
                 }
 
 
