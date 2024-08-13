@@ -19,13 +19,9 @@ public class CopperNetworkPowerClass {
     public void setNetworkmaxPower() {
         networkPower[0] = networkMaxPower;
     }
-    //public void setupNetwork() {
-    //    networkPower[0] = 0;
-    //    networkMaxPower = 0;
-    //}
-    //public void cleanupNetwork() {
-    //    networkPower[0] = 0;
-    //    networkMaxPower = 0;
-    //}
+    public void cleanupNetwork() {
+        networkPower[0] = 0;
+        networkMaxPower = 0;
+    }
 
 }
