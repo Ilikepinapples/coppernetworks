@@ -108,7 +108,7 @@ public class NetworkerBlockEntity extends BlockEntity {
                 }
 
             }
-            long maxPower = 1000 + (storage * 500);
+            long maxPower = 10000 + (storage * 5000);
             //overallblocks.removeAll(contained);- this would mean contained blocks aren't taken into account when detecting blocks connected to the network, not sure if this would reduce or create lag as it reduces the load after scanning is completed but adds another list and more steps durng scanning (that is already an intensive process and more checks are likely to make this even more intensive also it loops so this would add more steps many times over)
             for (BlockPos networkpos : overallblocks) {
                 if ((!networkpos.up().equals(pos)) && ((world.getBlockEntity(networkpos.up())) instanceof NetworkerBlockEntity networkerBlockEntity) && (!world.getBlockState(networkpos.up()).get(STORAGE)) && networkerBlockEntity.timePlaced >= blockEntity.timePlaced) {
