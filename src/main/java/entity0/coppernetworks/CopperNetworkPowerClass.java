@@ -20,7 +20,7 @@ public class CopperNetworkPowerClass {
         networkPower[0] = networkMaxPower;
     }
     public void cleanupNetwork() {
-        networkPower[0] = 0;
+        networkPower = new long[]{0};
         networkMaxPower = 0;
     }
 
