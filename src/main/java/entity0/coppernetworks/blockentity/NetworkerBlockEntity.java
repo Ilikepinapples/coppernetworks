@@ -235,7 +235,7 @@ public class NetworkerBlockEntity extends BlockEntity {
 // if nescessary put !world.isClient in an if statement on all of these to ensure executed on server
     @Override
     public void setWorld(World world) {
-        if (placed == false) {
+        if (!placed) {
             timePlaced = world.getTime();
             placed = true;
             markDirty();
