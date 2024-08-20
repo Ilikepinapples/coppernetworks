@@ -215,7 +215,6 @@ public class NetworkerBlockEntity extends BlockEntity {
 
                 }
                 for (Entity entityStoodOn : world.getOtherEntities(null, new Box(networkpos.up()))) {
-                    CopperNetworks.LOGGER.info(String.valueOf(entityStoodOn));
                     if (entityStoodOn instanceof LivingEntity) {
                         for (ItemStack itemStack :((LivingEntity) entityStoodOn).getEquippedItems()) {
                             if (itemStack.getItem() instanceof copperNetworkPowerAPI) {
