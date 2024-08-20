@@ -6,9 +6,14 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentType;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 
@@ -208,6 +213,17 @@ public class NetworkerBlockEntity extends BlockEntity {
                     ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.west())).copperNetworkAPI().networkPower = blockEntity.power;
                     ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.west())).copperNetworkAPI().networkMaxPower = maxPower;
 
+                }
+                for (Entity entityStoodOn : world.getOtherEntities(null, new Box(networkpos.up()))) {
+                    CopperNetworks.LOGGER.info(String.valueOf(entityStoodOn));
+                    if (entityStoodOn instanceof LivingEntity) {
+                        for (ItemStack itemStack :((LivingEntity) entityStoodOn).getEquippedItems()) {
+                            if (itemStack.getItem() instanceof copperNetworkPowerAPI) {
+                                ((copperNetworkPowerAPI) itemStack.getItem()).copperNetworkAPI().networkPower = blockEntity.power;
+                                ((copperNetworkPowerAPI) itemStack.getItem()).copperNetworkAPI().networkMaxPower = maxPower;
+                            }
+                        }
+                    }
                 }
 
 
