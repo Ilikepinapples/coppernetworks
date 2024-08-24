@@ -14,6 +14,7 @@ public class ModComponents {
     public static final ComponentType<copperNetworkItemPowerClass> COPPER_POWER_COMPONENT = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
             Identifier.of(CopperNetworks.MOD_ID, "copper_power"),
-            ComponentType.<copperNetworkItemPowerClass>builder().codec(copperNetworkItemPowerClass.CODEC).build()
+            ComponentType.<copperNetworkItemPowerClass>builder().codec(null).build()
+                    //copperNetworkItemPowerClass.CODEC).build()
     );
 }
