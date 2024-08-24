@@ -2,6 +2,7 @@ package entity0.coppernetworks.blockentity;
 
 import entity0.coppernetworks.copperNetworkPowerAPI;
 import entity0.coppernetworks.CopperNetworks;
+import entity0.coppernetworks.copperNetworkPowerItemAPI;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.ComponentMap;
@@ -217,9 +218,9 @@ public class NetworkerBlockEntity extends BlockEntity {
                 for (Entity entityStoodOn : world.getOtherEntities(null, new Box(networkpos.up()))) {
                     if (entityStoodOn instanceof LivingEntity) {
                         for (ItemStack itemStack :((LivingEntity) entityStoodOn).getEquippedItems()) {
-                            if (itemStack.getItem() instanceof copperNetworkPowerAPI) {
-                                ((copperNetworkPowerAPI) itemStack.getItem()).copperNetworkAPI().networkPower = blockEntity.power;
-                                ((copperNetworkPowerAPI) itemStack.getItem()).copperNetworkAPI().networkMaxPower = maxPower;
+                            if (itemStack.getItem() instanceof copperNetworkPowerItemAPI) {
+                                ((copperNetworkPowerItemAPI) itemStack.getItem()).copperNetworkAPI(itemStack).networkPower = blockEntity.power;
+                                ((copperNetworkPowerItemAPI) itemStack.getItem()).copperNetworkAPI(itemStack).networkMaxPower = maxPower;
                             }
                         }
                     }
