@@ -11,9 +11,9 @@ public class ModComponents {
         CopperNetworks.LOGGER.info("Initiating components for Item Access");
     }
 
-    public static final ComponentType<CopperNetworkPowerClass> COPPER_POWER_COMPONENT = Registry.register(
+    public static final ComponentType<copperNetworkItemPowerClass> COPPER_POWER_COMPONENT = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
-            Identifier.of(CopperNetworks.MOD_ID, "Copper_Power"),
-            ComponentType.<CopperNetworkPowerClass>builder().codec(CopperNetworkPowerClass.CODEC).build()
+            Identifier.of(CopperNetworks.MOD_ID, "copper_power"),
+            ComponentType.<copperNetworkItemPowerClass>builder().codec(copperNetworkItemPowerClass.CODEC).build()
     );
 }
