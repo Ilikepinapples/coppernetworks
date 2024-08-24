@@ -22,6 +22,7 @@ public class CopperNetworks implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
+		ModComponents.initialize();
 		ModBlocks.initializeCategory();
 		LOGGER.info("Copper shall now attempt to network.");
 		ModBlockEntity.registerBlockEntities();
