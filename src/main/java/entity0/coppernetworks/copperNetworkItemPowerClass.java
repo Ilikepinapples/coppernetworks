@@ -33,4 +33,4 @@ public class copperNetworkItemPowerClass {
         this.networkPower = networkPower;
     }
 
-    }
+}
