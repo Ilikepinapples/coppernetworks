@@ -9,5 +9,8 @@ public interface copperNetworkPowerItemAPI {
             }
             return stack.get(ModComponents.COPPER_POWER_COMPONENT);
         }
-        copperNetworkItemPowerClass getDefaultComponent();
+
+    default copperNetworkItemPowerClass getDefaultComponent() {
+        return new copperNetworkItemPowerClass(0);
     }
+}
