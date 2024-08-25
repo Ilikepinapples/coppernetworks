@@ -1,7 +1,5 @@
 package entity0.coppernetworks;
 
 public interface copperNetworkPowerAPI {
-    default CopperNetworkPowerClass copperNetworkAPI() {
-        return new CopperNetworkPowerClass();
-    }
+    CopperNetworkPowerClass copperNetworkAPI();
 }
