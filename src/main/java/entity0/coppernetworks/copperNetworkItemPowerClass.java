@@ -9,10 +9,10 @@ import java.util.stream.LongStream;
 
 
 public class copperNetworkItemPowerClass {
-    public static final Codec<entity0.coppernetworks.copperNetworkItemPowerClass> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final Codec<entity0.coppernetworks.copperNetworkItemPowerClass> CODEC = RecordCodecBuilder.create((instance -> instance.group(
                 Codec.LONG.fieldOf("networkMaxPower").forGetter(copperNetworkItemPowerClass::getNetworkMaxPower)//,
                 //Codec.LONG_STREAM.xmap(LongStream::toArray, Arrays::stream).fieldOf("networkPower").forGetter(copperNetworkItemPowerClass::getNetworkPower)
-        ).apply(instance, entity0.coppernetworks.copperNetworkItemPowerClass::new));
+        ).apply(instance, entity0.coppernetworks.copperNetworkItemPowerClass::new)));
 
         public long networkMaxPower;
         public long getNetworkMaxPower() {return networkMaxPower;}
@@ -33,7 +33,7 @@ public class copperNetworkItemPowerClass {
     public copperNetworkItemPowerClass (long networkMaxPower//, long[] networkPower) {
     ) {
         this.networkMaxPower = networkMaxPower;
-        this.networkPower = networkPower;
+        //this.networkPower = networkPower;
     }
 
 }
