@@ -3,5 +3,11 @@ package entity0.coppernetworks;
 import net.minecraft.item.ItemStack;
 
 public interface copperNetworkPowerItemAPI {
-        copperNetworkItemPowerClass copperNetworkAPI(ItemStack stack);
+        default copperNetworkItemPowerClass copperNetworkAPI(ItemStack stack) {
+            if (!stack.contains(ModComponents.COPPER_POWER_COMPONENT)) {
+                stack.set(ModComponents.COPPER_POWER_COMPONENT, getDefaultComponent());
+            }
+            return stack.get(ModComponents.COPPER_POWER_COMPONENT);
+        }
+        copperNetworkItemPowerClass getDefaultComponent();
     }
