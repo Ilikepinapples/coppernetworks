@@ -4,11 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class copperNetworkItemPowerClass {
-        //public static final Codec<entity0.coppernetworks.copperNetworkItemPowerClass> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        public static final Codec<entity0.coppernetworks.copperNetworkItemPowerClass> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 //Codec.LONG.fieldOf("network_max_power").forGetter(CopperNetworkPowerClass::getNetworkMaxPower),
                 //Codec.LONG_STREAM.xmap(LongStream::toArray, Arrays::stream).fieldOf("network_power").forGetter(CopperNetworkPowerClass::getNetworkPower),
-                //Codec.INT.fieldOf("e").forGetter(entity0.coppernetworks.copperNetworkItemPowerClass::getE)
-        //).apply(instance, entity0.coppernetworks.copperNetworkItemPowerClass::new));
+                Codec.INT.fieldOf("e").forGetter(entity0.coppernetworks.copperNetworkItemPowerClass::getE)
+        ).apply(instance, entity0.coppernetworks.copperNetworkItemPowerClass::new));
 
         public long networkMaxPower;
         public long getNetworkMaxPower() {return networkMaxPower;}
@@ -25,10 +25,10 @@ public class copperNetworkItemPowerClass {
             networkMaxPower = 0;
         }
 
-        //public int e = 0;
-        //public int getE() {
-        //    return e;
-        //}
-        //public copperNetworkItemPowerClass (int e) {}
+         int e = 0;
+        public int getE() {
+            return e;
+        }
+        public copperNetworkItemPowerClass (int e) {}
 
     }
