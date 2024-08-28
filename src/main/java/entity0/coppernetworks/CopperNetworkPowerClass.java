@@ -10,19 +10,22 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 public class CopperNetworkPowerClass {
-    public long networkMaxPower;
-    public long getNetworkMaxPower() {return networkMaxPower;}
-    public long[] networkPower = new long[]{0};
-    public long[] getNetworkPower() {return networkPower;}
+    public int id;
+    public long getNetworkMaxPower (int id) {
+        if (!(NetworkerClass.Networks.get(id) == null)) {
+            return (long) NetworkerClass.Networks.get(id).get(1);
+        }
+        else {return 0L;}
+    }
 
-    public boolean canConsume(long consumePower) {return consumePower <= networkPower[0];}
-    public boolean canGenerate(long genPower) {return genPower + networkPower[0] <= networkMaxPower;}
-    public void generate(long genPower) {networkPower[0] = networkPower[0] + genPower;}
-    public void consume(long consumePower) {networkPower[0] = networkPower[0] - consumePower;}
-    public void setNetworkmaxPower() {networkPower[0] = networkMaxPower;}
+
+    public boolean canConsume(long consumePower) {return consumePower <= NetworkerClass.getPower(id);}
+    public boolean canGenerate(long genPower) {return genPower + NetworkerClass.getPower(id) <= getNetworkMaxPower(id);}
+    public void generate(long genPower) {NetworkerClass.setPower(NetworkerClass.getPower(id) + genPower, id);}
+    public void consume(long consumePower) {NetworkerClass.setPower(NetworkerClass.getPower(id) - consumePower, id);}
+    public void setNetworkmaxPower() {NetworkerClass.setPower(getNetworkMaxPower(id), id);}
     public void cleanupNetwork() {
-        networkPower = new long[]{0};
-        networkMaxPower = 0;
+        id = 0;
     }
 
 }
