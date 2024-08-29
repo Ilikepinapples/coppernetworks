@@ -144,7 +144,7 @@ public class NetworkerClass {
                 if (entityStoodOn instanceof LivingEntity) {
                     for (ItemStack itemStack : ((LivingEntity) entityStoodOn).getEquippedItems()) {
                         if (itemStack.getItem() instanceof copperNetworkPowerItemAPI) {
-                            ((copperNetworkPowerItemAPI) itemStack.getItem()).copperNetworkAPI(itemStack).id = blockEntity.hashCode(); //This needs to change to work correctly
+                            ((copperNetworkPowerItemAPI) itemStack.getItem()).copperNetworkAPI(itemStack).id = blockEntity.hashCode(); //This works
                         }
                     }
                 }
