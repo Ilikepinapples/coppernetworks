@@ -6,6 +6,7 @@ import net.minecraft.block.Oxidizable;
 import net.minecraft.client.RunArgs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -140,12 +141,20 @@ public class NetworkerClass {
                 ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.west())).copperNetworkAPI().id = blockEntity.hashCode();
 
             }
-            for (Entity entityStoodOn : world.getOtherEntities(null, new Box(networkpos.up()))) {
+            BlockPos corner1 = networkpos.up().north().west();
+            BlockPos corner2 = networkpos.down().south().east();
+            for (Entity entityStoodOn : world.getOtherEntities(null, new Box(corner1.getX(), corner1.getY(), corner1.getZ(), corner2.getX(), corner2.getY(), corner2.getZ()))) {
                 if (entityStoodOn instanceof LivingEntity) {
                     for (ItemStack itemStack : ((LivingEntity) entityStoodOn).getEquippedItems()) {
                         if (itemStack.getItem() instanceof copperNetworkPowerItemAPI) {
-                            ((copperNetworkPowerItemAPI) itemStack.getItem()).copperNetworkAPI(itemStack).id = blockEntity.hashCode(); //This works
+                            ((copperNetworkPowerItemAPI) itemStack.getItem()).copperNetworkAPI(itemStack).id = blockEntity.hashCode(); //This needs to change to work correctly -- does it? seems to work
                         }
+                    }
+                }
+                if (entityStoodOn instanceof ItemFrameEntity) {
+                    ItemStack itemStack = ((ItemFrameEntity) entityStoodOn).getHeldItemStack();
+                    if (itemStack.getItem() instanceof copperNetworkPowerItemAPI) {
+                        ((copperNetworkPowerItemAPI) itemStack.getItem()).copperNetworkAPI(itemStack).id = blockEntity.hashCode(); //This needs to change to work correctly -- does it? seems to work
                     }
                 }
             }
