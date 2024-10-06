@@ -141,8 +141,10 @@ public class NetworkerClass {
                 ((copperNetworkPowerAPI) world.getBlockEntity(networkpos.west())).copperNetworkAPI().id = blockEntity.hashCode();
 
             }
-            BlockPos corner1 = networkpos.up().north().west();
-            BlockPos corner2 = networkpos.down().south().east();
+            BlockPos corner1 = networkpos.up(2).north(1).west(1);
+            BlockPos corner2 = networkpos.down(1).south(2).east(2);
+            CopperNetworks.LOGGER.info(world.getOtherEntities(null, new Box(corner1.getX(), corner1.getY(), corner1.getZ(), corner2.getX(), corner2.getY(), corner2.getZ())).toString());
+            //CopperNetworks.LOGGER.info(world.getOtherEntities(null, new Box(networkpos.up())).toString());
             for (Entity entityStoodOn : world.getOtherEntities(null, new Box(corner1.getX(), corner1.getY(), corner1.getZ(), corner2.getX(), corner2.getY(), corner2.getZ()))) {
                 if (entityStoodOn instanceof LivingEntity) {
                     for (ItemStack itemStack : ((LivingEntity) entityStoodOn).getEquippedItems()) {
