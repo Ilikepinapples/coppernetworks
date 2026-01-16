@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "entity0.coppernetworks.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"oxidationmixin",
+		"blockchangemixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
