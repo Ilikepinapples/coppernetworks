@@ -2,6 +2,9 @@ package entity0.coppernetworks;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.minecraft.block.Blocks;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -25,13 +28,19 @@ public class CopperNetworks implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-		LOGGER.info("Hello Fabric world!");
+
+		ServerLifecycleEvents.BEFORE_SAVE.register((server, fl, fo) -> {
+			Networks.getOrCreateNetworks(server).save(server);
+
+		});
+
 		oxievent.EVENT.register((pos, world) -> {
 			//not bothering to check if these are actually in the network after checking all interest areas is still useful because any partially oxidised block connected also are prevented fro oxidisng further kinda smoothing the transition
-			if (Networks.ispresentininterest(new PosWorld(pos, world))) {
-				Set<UUID> networks = Networks.getInterestedNetworks(new PosWorld(pos, world));
+			Networks Nets = Networks.getOrCreateNetworks(world.getServer());
+			if (Nets.ispresentininterest(new PosWorld(pos, world))) {
+				Set<UUID> networks = Nets.getInterestedNetworks(new PosWorld(pos, world));
 				for (UUID uuid : networks) {
-					Network net = Networks.getNetwork(uuid);
+					Network net = Nets.getNetwork(uuid);
 					if (net.getPower() >= 1) {
 						net.setPower(net.getPower() - 1);
 						world.syncWorldEvent(WorldEvents.ELECTRICITY_SPARKS, pos, -1);
@@ -41,17 +50,19 @@ public class CopperNetworks implements ModInitializer {
 			}
 				return ActionResult.PASS;
 		} );
+
 		changeblockevent.EVENT.register((pos, world, old, newb) -> {
-			if (Networks.ispresentininterest(new PosWorld(pos, world))) {
+			Networks Nets = Networks.getOrCreateNetworks(world.getServer());
+			if (Nets.ispresentininterest(new PosWorld(pos, world))) {
 				//change from copper to conductive
-				Set<UUID> networks = Networks.getInterestedNetworks(new PosWorld(pos, world));
+				Set<UUID> networks = Nets.getInterestedNetworks(new PosWorld(pos, world));
 				if (newb.getBlock() == Blocks.COPPER_BLOCK) {
 					for (UUID uuid : networks) {
-						Networks.getNetwork(uuid).scanfromtoadd(pos);
+						Nets.getNetwork(uuid).scanfromtoadd(pos);
 					}
 				} else {
 					for (UUID uuid : networks) {
-						Network net = Networks.getNetwork(uuid);
+						Network net = Nets.getNetwork(uuid);
 						if (net.innet(pos)) {
 							net.scantoremovehanging(pos);
 						}

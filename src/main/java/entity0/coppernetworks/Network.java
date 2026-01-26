@@ -40,7 +40,7 @@ public class Network {
         //make this check if a block is not in the network and is conductive (change check for copper block to conductive)
         Set<BlockPos> toscanfrom = new HashSet<BlockPos>();
         toscanfrom.add(initialpos);
-        Networks.addInterestAllAround(new PosWorld(initialpos, world), networkuuid);
+        Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(initialpos, world), networkuuid);
         Set<BlockPos> ScanfromNext;
         Boolean finished = false;
         while (!finished) {
@@ -50,32 +50,32 @@ public class Network {
                 if (!blocksinnet.contains(pos.up()) && world.getBlockState(pos.up()) == Blocks.COPPER_BLOCK.getDefaultState()) {
                     blocksinnet.add(pos.up());
                     ScanfromNext.add(pos.up());
-                    Networks.addInterestAllAround(new PosWorld(pos.up(),world), networkuuid);
+                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.up(),world), networkuuid);
                 }
                 if (!blocksinnet.contains(pos.down()) && world.getBlockState(pos.down()) == Blocks.COPPER_BLOCK.getDefaultState()) {
                     blocksinnet.add(pos.down());
                     ScanfromNext.add(pos.down());
-                    Networks.addInterestAllAround(new PosWorld(pos.down(),world), networkuuid);
+                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.down(),world), networkuuid);
                 }
                 if (!blocksinnet.contains(pos.north()) && world.getBlockState(pos.north()) == Blocks.COPPER_BLOCK.getDefaultState()) {
                     blocksinnet.add(pos.north());
                     ScanfromNext.add(pos.north());
-                    Networks.addInterestAllAround(new PosWorld(pos.north(),world), networkuuid);
+                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.north(),world), networkuuid);
                 }
                 if (!blocksinnet.contains(pos.south()) && world.getBlockState(pos.south()) == Blocks.COPPER_BLOCK.getDefaultState()) {
                     blocksinnet.add(pos.south());
                     ScanfromNext.add(pos.south());
-                    Networks.addInterestAllAround(new PosWorld(pos.south(),world), networkuuid);
+                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.south(),world), networkuuid);
                 }
                 if (!blocksinnet.contains(pos.east()) && world.getBlockState(pos.east()) == Blocks.COPPER_BLOCK.getDefaultState()) {
                     blocksinnet.add(pos.east());
                     ScanfromNext.add(pos.east());
-                    Networks.addInterestAllAround(new PosWorld(pos.east(),world), networkuuid);
+                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.east(),world), networkuuid);
                 }
                 if (!blocksinnet.contains(pos.west()) && world.getBlockState(pos.west()) == Blocks.COPPER_BLOCK.getDefaultState()) {
                     blocksinnet.add(pos.west());
                     ScanfromNext.add(pos.west());
-                    Networks.addInterestAllAround(new PosWorld(pos.west(),world), networkuuid);
+                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.west(),world), networkuuid);
                 }
             }
             toscanfrom = ScanfromNext;
@@ -90,45 +90,45 @@ public class Network {
         scan = scantocore(initialpos.up());
         if (!scan.contains(corepos)) {
             blocksinnet.removeAll(scan);
-            Networks.removeInterestAllAround(new PosWorld(initialpos.up(), world), networkuuid);
+            Networks.getOrCreateNetworks(world.getServer()).removeInterestAllAround(new PosWorld(initialpos.up(), world), networkuuid);
         }
         scan = scantocore(initialpos.down());
         if (!scan.contains(corepos)) {
             blocksinnet.removeAll(scan);
             for (BlockPos pos : scan) {
-                Networks.removeInterestAllAround(new PosWorld(pos, world), networkuuid);
+                Networks.getOrCreateNetworks(world.getServer()).removeInterestAllAround(new PosWorld(pos, world), networkuuid);
             }
         }
         scan = scantocore(initialpos.north());
         if (!scan.contains(corepos)) {
             blocksinnet.removeAll(scan);
             for (BlockPos pos : scan) {
-                Networks.removeInterestAllAround(new PosWorld(pos, world), networkuuid);
+                Networks.getOrCreateNetworks(world.getServer()).removeInterestAllAround(new PosWorld(pos, world), networkuuid);
             }
         }
         scan = scantocore(initialpos.south());
         if (!scan.contains(corepos)) {
             blocksinnet.removeAll(scan);
             for (BlockPos pos : scan) {
-                Networks.removeInterestAllAround(new PosWorld(pos, world), networkuuid);
+                Networks.getOrCreateNetworks(world.getServer()).removeInterestAllAround(new PosWorld(pos, world), networkuuid);
             }
         }
         scan = scantocore(initialpos.east());
         if (!scan.contains(corepos)) {
             blocksinnet.removeAll(scan);
             for (BlockPos pos : scan) {
-                Networks.removeInterestAllAround(new PosWorld(pos, world), networkuuid);
+                Networks.getOrCreateNetworks(world.getServer()).removeInterestAllAround(new PosWorld(pos, world), networkuuid);
             }
         }
         scan = scantocore(initialpos.west());
         if (!scan.contains(corepos)) {
             blocksinnet.removeAll(scan);
             for (BlockPos pos : scan) {
-                Networks.removeInterestAllAround(new PosWorld(pos, world), networkuuid);
+                Networks.getOrCreateNetworks(world.getServer()).removeInterestAllAround(new PosWorld(pos, world), networkuuid);
             }
         }
         for (BlockPos pos : blocksinnet) {
-            Networks.addInterestAllAround(new PosWorld(pos, world), networkuuid);
+            Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos, world), networkuuid);
         }
     }
 
