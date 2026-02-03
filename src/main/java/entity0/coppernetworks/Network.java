@@ -14,15 +14,16 @@ import java.util.UUID;
 
 public class Network {
     long power;
-    Set<BlockPos> blocksinnet = new HashSet<BlockPos>();
+    Set<BlockPos> blocksinnet;
     BlockPos corepos;
     UUID networkuuid;
     ServerWorld world;
-    public Network (BlockPos coreposition, UUID uuidofnetwork, long netpower, ServerWorld worldNet) {
+    public Network (BlockPos coreposition, UUID uuidofnetwork, long netpower, ServerWorld worldNet, Set<BlockPos> blockinnetwork) {
         this.corepos = coreposition;
         this.networkuuid = uuidofnetwork;
         this.power = netpower;
         this.world = worldNet;
+        this.blocksinnet = blockinnetwork;
     }
 
     public long getPower() {
