@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Set;
 import java.util.UUID;
 
+import static entity0.coppernetworks.CopperBlocktagsprovider.CONDUCTIVEITEMS;
+
 public class CopperNetworks implements ModInitializer {
 	public static final String MOD_ID = "copper-networks";
 
@@ -43,7 +45,7 @@ public class CopperNetworks implements ModInitializer {
 				Set<UUID> networks = Networks.getOrCreateNetworks(world.getServer()).getInterestedNetworks(new PosWorld(pos, world));
 				for (UUID uuid : networks) {
 					Network net = Networks.getOrCreateNetworks(world.getServer()).getNetwork(uuid);
-					if (net.getPower() >= 1) {
+					if (net != null && net.getPower() >= 1) {
 						net.setPower(net.getPower() - 1);
 						world.syncWorldEvent(WorldEvents.ELECTRICITY_SPARKS, pos, -1);
 						return ActionResult.FAIL; //if this is an area shared between networks its kinda arbitrary which one loses power for it (first registered one with enough energy)
@@ -56,21 +58,27 @@ public class CopperNetworks implements ModInitializer {
 
 
 		changeblockevent.EVENT.register((pos, world, old, newb) -> {
-			if (Networks.getOrCreateNetworks(world.getServer()).ispresentininterest(new PosWorld(pos, world))) {
-				//change from copper to conductive
-				Set<UUID> networks = Networks.getOrCreateNetworks(world.getServer()).getInterestedNetworks(new PosWorld(pos, world));
-				if (newb.getBlock() == Blocks.COPPER_BLOCK) {
-					for (UUID uuid : networks) {
-						Networks.getOrCreateNetworks(world.getServer()).getNetwork(uuid).scanfromtoadd(pos);
-					}
-				} else {
-					for (UUID uuid : networks) {
-						Network net = Networks.getOrCreateNetworks(world.getServer()).getNetwork(uuid);
-						if (net.innet(pos)) {
-							net.scantoremovehanging(pos);
+				if (Networks.getOrCreateNetworks(world.getServer()).ispresentininterest(new PosWorld(pos, world))) {
+					Set<UUID> networks = Set.copyOf(Networks.getOrCreateNetworks(world.getServer()).getInterestedNetworks(new PosWorld(pos, world)));
+					if (newb.isIn(CONDUCTIVEITEMS)) {
+						for (UUID uuid : networks) {
+							Network net = Networks.getOrCreateNetworks(world.getServer()).getNetwork(uuid);
+							if (net != null) {
+     								net.scanfromtoadd(pos);
+							}
 						}
+					} else {
+						//try {
+						for (UUID uuid : networks) {
+							Network net = Networks.getOrCreateNetworks(world.getServer()).getNetwork(uuid);
+							if (net != null) {
+								if (net.innet(pos)) {
+									net.scantoremovehanging(pos);
+								}
+							}
+						}
+						//} catch (Exception ignored) {}
 					}
-				}
 			}
 			return ActionResult.PASS;
 		});

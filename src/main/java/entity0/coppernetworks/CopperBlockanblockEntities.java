@@ -3,6 +3,7 @@ package entity0.coppernetworks;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
@@ -29,7 +30,11 @@ public static Block register(Block block, String name) {
     return Registry.register(Registries.BLOCK, id, block);
 }
 
-    public static final Block NETWORKER_BLOCK = register(new copperNetworkerBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.COPPER)), "networker_block");
+    public static final Block NETWORKER_BLOCK = register(new copperNetworkerBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.COPPER)
+            .luminance(copperNetworkerBlock::getLuminance)
+            .mapColor(MapColor.ORANGE)
+            .requiresTool()
+            .strength(3.0F, 6.0F)), "networker_block");
     public static final BlockEntityType<CopperNetworkerBlockEntity> NETWORKERBE  = register("networker",CopperNetworkerBlockEntity::new, CopperBlockanblockEntities.NETWORKER_BLOCK);
 
 }

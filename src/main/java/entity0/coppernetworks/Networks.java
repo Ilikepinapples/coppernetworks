@@ -29,6 +29,16 @@ public class Networks {
 
 
 
+
+
+    //TODO LOOKS LIKE WE'RE MAKING A QUEUE BOYS, should probably tick the queue so every tick it runs all queued and clears the queue
+
+
+
+    //TODO accessor methods for all of this so that operaitons are queued and there is no conficts, maybe no queue is needed if I have an accessor method? like maybe it orders the mehthods by just calling them thorugh an acessor becasue java? once thats done make these private
+
+
+
     public void save (MinecraftServer server) {
         String netstring = NetworkString();
         try {
@@ -45,11 +55,42 @@ public class Networks {
         NetworkMap = netmap;
         interestedblocks = interestblock;
         interestNetworkMap = interestNetMap;
+
+
     }
     public Networks () {
         NetworkMap = new HashMap<UUID, Network>();
         interestedblocks = new HashSet<PosWorld>();
         interestNetworkMap = new HashMap<PosWorld, Set<UUID>>();
+
+    }
+
+
+    public void mergenetworks (UUID consumenet, UUID susbsumenet) {
+        Network consume = NetworkMap.get(consumenet);
+        Network subsume = NetworkMap.get(susbsumenet);
+        if (consume != null && subsume != null) {
+            consume.blocksinnet.addAll(subsume.blocksinnet);
+            consume.power = (consume.getPower() + subsume.getPower());
+            consume.corepos.addAll(subsume.corepos);
+            removeNetwork(susbsumenet);
+        }
+
+    }
+    public void splitnet (UUID networkuuid, List<Set<BlockPos>> netstomake, List<Set<BlockPos>> blockstomakeitwith, ServerWorld world) {
+        List<Set<BlockPos>> makinNets = netstomake;
+        makinNets.remove(0);//index 0 remains as the original net
+        List<Set<BlockPos>> blockkinnets = blockstomakeitwith;
+        blockkinnets.remove(0);
+        for (int i = 0; i<makinNets.size(); i++) {
+            UUID uuid = createNetworknoscan(makinNets.get(i), 0, world, blockkinnets.get(i));
+            for (BlockPos pos : makinNets.get(i)) {
+                if (world.getBlockEntity(pos) instanceof CopperNetworkerBlockEntity copperbe) {
+                    copperbe.SetUUID(uuid);
+                }
+                getNetwork(networkuuid).corepos.remove(pos);
+            }
+        }
     }
 
 
@@ -57,30 +98,46 @@ public class Networks {
 
     public UUID createNetwork(BlockPos coreposition, long netpower, ServerWorld world) {
         UUID uuid = UUID.randomUUID();
-        Network net = new Network(coreposition, uuid, netpower, world, new HashSet<BlockPos>());
+        Set<BlockPos> corepositions = new HashSet<>();
+        corepositions.add(coreposition);
+        Network net = new Network(corepositions, uuid, netpower, world, new HashSet<BlockPos>(), 0L);
         net.scanfromtoadd(coreposition);
         NetworkMap.put(uuid, net);
+        return uuid;
+    }
+    public UUID createNetworknoscan(Set<BlockPos> coreposition, long netpower, ServerWorld world, Set<BlockPos> blocksinnet) {
+        UUID uuid = UUID.randomUUID();
+        Network net = new Network(coreposition, uuid, netpower, world, blocksinnet, 0L);
+        NetworkMap.put(uuid, net);
+        for (BlockPos positions : blocksinnet) {
+            Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(positions, world), uuid);
+        }
         return uuid;
     }
     public  Network getNetwork(UUID uuid) {
         return NetworkMap.get(uuid);
     }
     public  void removeNetwork(UUID uuid) {
-        if (NetworkMap.containsKey(uuid)) {
-            for (BlockPos posits : NetworkMap.get(uuid).blocksinnet) {
-                removeInterestAllAround(new PosWorld(posits, NetworkMap.get(uuid).world), uuid);
+        if (uuid != null) {
+            if (NetworkMap.containsKey(uuid)) {
+                if (NetworkMap.get(uuid) != null) {
+                    for (BlockPos posits : NetworkMap.get(uuid).blocksinnet) {
+                        removeInterestAllAround(new PosWorld(posits, NetworkMap.get(uuid).world), uuid);
+                    }
+                }
             }
+            NetworkMap.remove(uuid); // TODO appears that right now something calling this or this is leaving the astating parts of a netwokrk in the networkmap and then they get serialsied, unsure why
         }
-        NetworkMap.remove(uuid);
     }
     //get or create probably isn't nescessary because a block with no id is gonna make a new network anyway and a block with an id is gonna connect to a network unless something has gone very wrong
+
 
 
 
     public void removeinterest (PosWorld posworld, UUID uuid) {
         Set<UUID> uuidset;
         uuidset = interestNetworkMap.get(posworld);
-        if (!(uuidset ==null)) {
+        if (!(uuidset == null)) {
             uuidset.remove(uuid);
             if (uuidset.isEmpty()) {
                 interestedblocks.remove(posworld);
@@ -142,7 +199,13 @@ public class Networks {
                 towrite = towrite.substring(0, towrite.length() - 1);
             }
             towrite = towrite + "L";
-            towrite = towrite + keyvalueset.getValue().corepos.getX() + "," + keyvalueset.getValue().corepos.getY() + "," + keyvalueset.getValue().corepos.getZ() + "," + keyvalueset.getValue().power  + "," + keyvalueset.getValue().networkuuid + "," + keyvalueset.getValue().world.getRegistryKey().getValue() + "#";
+            for (BlockPos corepos :  keyvalueset.getValue().corepos) {
+                towrite = towrite + corepos.getX() + "." + corepos.getY() + "." + corepos.getZ() + "&";
+            }
+            if (towrite.lastIndexOf("&") == towrite.length()-1) {
+                towrite = towrite.substring(0, towrite.length() - 1);
+            }
+            towrite = towrite + "," + keyvalueset.getValue().power  + "," + keyvalueset.getValue().networkuuid + "," + keyvalueset.getValue().world.getRegistryKey().getValue() +","+keyvalueset.getValue().storageattached + "#";
         }
         if (!towrite.isEmpty()) {
             towrite = towrite.substring(0, towrite.length() - 1);
@@ -184,7 +247,7 @@ public class Networks {
                         return netsObject;
                     }
                     String[] splitNetData = savedNBTNets.split("\\|");
-
+                    //try {
                     HashMap<UUID, Network> networkmapdata = new HashMap<UUID, Network>();
                     //fpr psme reason, whether data is being saved improperly or read imporperly this is trying to access things in the string that don't exist and crashing cuz of trying to put null to an integer
                         String[] networkmapdataStrings = splitNetData[0].split("#");
@@ -193,15 +256,24 @@ public class Networks {
                             UUID uuidkey = UUID.fromString(networkmapsplitdataString[0]);
                             Set<BlockPos> blocksinnetdata = new HashSet<>();
                                 for (String blocksinnetdatasplit : networkmapsplitdataString[1].split("C")) {
-                                    String[] blockposinnetsplit = blocksinnetdatasplit.split(",");
+                                    if (!blocksinnetdatasplit.isEmpty()) {
+                                        String[] blockposinnetsplit = blocksinnetdatasplit.split(",");
                                         blocksinnetdata.add(new BlockPos(Integer.parseInt(blockposinnetsplit[0]), Integer.parseInt(blockposinnetsplit[1]), Integer.parseInt(blockposinnetsplit[2])));
+                                    }
                                 }
                             String[] networkmapsplitdataStringpt3 = networkmapsplitdataString[2].split(",");
-                            BlockPos corepos = new BlockPos(Integer.parseInt(networkmapsplitdataStringpt3[0]), Integer.parseInt(networkmapsplitdataStringpt3[1]), Integer.parseInt(networkmapsplitdataStringpt3[2]));
-                            Long power = Long.parseLong(networkmapsplitdataStringpt3[3]);
-                            UUID networkUUID = UUID.fromString(networkmapsplitdataStringpt3[4]);
-                            ServerWorld networkworld = server.getWorld(RegistryKey.of(RegistryKey.ofRegistry(Identifier.ofVanilla("dimension")), Identifier.of(networkmapsplitdataStringpt3[5])));
-                            networkmapdata.put(uuidkey, new Network(corepos, networkUUID, power, networkworld, blocksinnetdata));
+
+                            Set<BlockPos> corepos = new HashSet<>();
+                            for (String coreposstring : networkmapsplitdataStringpt3[0].split("&")) {
+                                String[] corepossplitstring =  coreposstring.split("\\.");
+                                corepos.add(new BlockPos(Integer.parseInt(corepossplitstring[0]), Integer.parseInt(corepossplitstring[1]), Integer.parseInt(corepossplitstring[2])));
+                            }
+
+                            Long power = Long.parseLong(networkmapsplitdataStringpt3[1]);
+                            UUID networkUUID = UUID.fromString(networkmapsplitdataStringpt3[2]);
+                            ServerWorld networkworld = server.getWorld(RegistryKey.of(RegistryKey.ofRegistry(Identifier.ofVanilla("dimension")), Identifier.of(networkmapsplitdataStringpt3[3])));
+                            long attachedstoragetonet = Long.parseLong(networkmapsplitdataStringpt3[4]);
+                            networkmapdata.put(uuidkey, new Network(corepos, networkUUID, power, networkworld, blocksinnetdata, attachedstoragetonet));
                         }
 
                     Set<PosWorld> interestBlockdata = new HashSet<PosWorld>();
@@ -226,7 +298,20 @@ public class Networks {
                     }
                     netsObject = new Networks(networkmapdata, interestBlockdata, posworlduuiddata);
                     return netsObject;
+                    //} catch (Exception q) {
+                    //    CopperNetworks.LOGGER.info("error reading network data, new network data created.");
+                    //    netsObject = new Networks();
+                    //    String nbtnetstring = netsObject.NetworkString();
+                    //    try {
+                    //        if(Files.exists(server.getSavePath(WorldSavePath.ROOT).resolve("NetworksCopper"))) {
+                    //            Files.delete(server.getSavePath(WorldSavePath.ROOT).resolve("NetworksCopper"));
+                    //        }
+                    //        Files.write(Files.createFile(server.getSavePath(WorldSavePath.ROOT).resolve("NetworksCopper")), nbtnetstring.getBytes());
+                    //    } catch (IOException e) {}
+                    //    return netsObject;
+                    //}
                 } catch (IOException e) {}
+
             } else {
                 netsObject = new Networks();
                 String nbtnetstring = netsObject.NetworkString();

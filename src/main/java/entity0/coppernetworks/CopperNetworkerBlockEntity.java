@@ -15,23 +15,38 @@ public class CopperNetworkerBlockEntity extends BlockEntity {
     public CopperNetworkerBlockEntity(BlockPos pos, BlockState state) {
         super(CopperBlockanblockEntities.NETWORKERBE, pos, state);
     }
-    UUID netUUID;
+    private UUID netUUID;
+    public void SetUUID(UUID uuid) {
+        netUUID = uuid;
+        markDirty();
+    }
     public void placed(ServerWorld world, BlockPos pos) {
-        netUUID = Networks.getOrCreateNetworks(world.getServer()).createNetwork(pos, 0L, world);
+        if (netUUID == null) {
+            netUUID = Networks.getOrCreateNetworks(world.getServer()).createNetwork(pos, 0L, world);
+        }
         markDirty();
     }
 
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        nbt.putUuid("uuid", netUUID);
+            nbt.putUuid("uuid", netUUID);
     }
 
     @Override
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         netUUID = nbt.getUuid("uuid");
     }
+    public UUID getUUID () {
+        return netUUID;
+    }
 
     public void broken(ServerWorld world) {
-        Networks.getOrCreateNetworks(world.getServer()).removeNetwork(netUUID);
+        if (Networks.getOrCreateNetworks(world.getServer()).getNetwork(netUUID) != null) {
+            Networks.getOrCreateNetworks(world.getServer()).getNetwork(netUUID).corepos.remove(getPos());
+            //Networks.getOrCreateNetworks(world.getServer()).getNetwork(netUUID).scantoremovehanging(getPos());
+            if (Networks.getOrCreateNetworks(world.getServer()).getNetwork(netUUID).corepos.isEmpty()) {
+                Networks.getOrCreateNetworks(world.getServer()).removeNetwork(netUUID);
+            }
+        }
     }
 }

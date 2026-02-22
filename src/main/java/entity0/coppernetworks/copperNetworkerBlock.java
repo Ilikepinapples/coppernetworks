@@ -1,6 +1,7 @@
 package entity0.coppernetworks;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -9,6 +10,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -18,8 +21,12 @@ import org.jetbrains.annotations.Nullable;
 public class copperNetworkerBlock extends BlockWithEntity {
     protected copperNetworkerBlock(Settings settings) {
         super(settings);
+        setDefaultState(getDefaultState().with(STORAGE, false));
     }
 
+    public static int getLuminance(BlockState state) {
+        return state.get(copperNetworkerBlock.STORAGE) ? 0 : 5;
+    }
     @Override
     protected MapCodec<? extends BlockWithEntity> getCodec() {
         return createCodec(copperNetworkerBlock::new);
@@ -45,6 +52,12 @@ public class copperNetworkerBlock extends BlockWithEntity {
                 ((CopperNetworkerBlockEntity) ent).placed((ServerWorld) world, pos);
             }
         }
+    }
+    public static final BooleanProperty STORAGE = BooleanProperty.of("storage");
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(STORAGE);
     }
 
     @Override
