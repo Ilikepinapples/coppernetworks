@@ -28,6 +28,7 @@ public class CopperBlocktagsprovider extends FabricTagProvider<Block> {
                 .add(Blocks.CUT_COPPER)
                 .add(Blocks.CUT_COPPER_SLAB)
                 .add(Blocks.CUT_COPPER_STAIRS)
-                .add(CopperBlockanblockEntities.NETWORKER_BLOCK);
+                .add(CopperBlockanblockEntities.NETWORKER_BLOCK)
+                .add(CopperBlockanblockEntities.STORAGE_BLOCK);
     }
 }

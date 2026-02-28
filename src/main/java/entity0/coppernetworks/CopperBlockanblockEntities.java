@@ -35,6 +35,15 @@ public static Block register(Block block, String name) {
             .mapColor(MapColor.ORANGE)
             .requiresTool()
             .strength(3.0F, 6.0F)), "networker_block");
+
+
+    public static final Block STORAGE_BLOCK = register(new storageblock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.COPPER)
+            .luminance(copperNetworkerBlock::getLuminance)
+            .mapColor(MapColor.ORANGE)
+            .requiresTool()
+            .strength(3.0F, 6.0F)), "storage_block");
+
+
     public static final BlockEntityType<CopperNetworkerBlockEntity> NETWORKERBE  = register("networker",CopperNetworkerBlockEntity::new, CopperBlockanblockEntities.NETWORKER_BLOCK);
 
 }

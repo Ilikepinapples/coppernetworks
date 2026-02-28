@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.text.Text;
@@ -55,6 +56,7 @@ public class CopperNetworks implements ModInitializer {
 				return ActionResult.PASS;
 		} );
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register((itemGroup) -> itemGroup.add(CopperBlockanblockEntities.NETWORKER_BLOCK.asItem()));
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register((itemGroup) -> itemGroup.add(CopperBlockanblockEntities.STORAGE_BLOCK.asItem()));
 
 
 		changeblockevent.EVENT.register((pos, world, old, newb) -> {
@@ -73,7 +75,7 @@ public class CopperNetworks implements ModInitializer {
 							Network net = Networks.getOrCreateNetworks(world.getServer()).getNetwork(uuid);
 							if (net != null) {
 								if (net.innet(pos)) {
-									net.scantoremovehanging(pos);
+									net.scantoremovehanging(pos, old);
 								}
 							}
 						}

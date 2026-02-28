@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "copper-networks:block/networker_storage"
+    }
+  }
+}

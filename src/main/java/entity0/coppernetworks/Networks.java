@@ -2,6 +2,8 @@ package entity0.coppernetworks;
 
 
 
+import entity0.coppernetworks.API.CopperPowerAPI;
+import entity0.coppernetworks.API.CopperStorageAPI;
 import net.minecraft.command.argument.NbtCompoundArgumentType;
 import net.minecraft.command.argument.packrat.NbtParsingRule;
 import net.minecraft.component.type.NbtComponent;
@@ -77,17 +79,15 @@ public class Networks {
         }
 
     }
-    public void splitnet (UUID networkuuid, List<Set<BlockPos>> netstomake, List<Set<BlockPos>> blockstomakeitwith, ServerWorld world) {
-        List<Set<BlockPos>> makinNets = netstomake;
-        makinNets.remove(0);//index 0 remains as the original net
-        List<Set<BlockPos>> blockkinnets = blockstomakeitwith;
-        blockkinnets.remove(0);
-        for (int i = 0; i<makinNets.size(); i++) {
-            UUID uuid = createNetworknoscan(makinNets.get(i), 0, world, blockkinnets.get(i));
-            for (BlockPos pos : makinNets.get(i)) {
+    public void splitnet (UUID networkuuid, List<Set<BlockPos>> netstomake, List<Set<BlockPos>> blockstomakeitwith, ServerWorld world, List<Set<BlockPos>> storagestobewithin, List<Set<BlockPos>> PoweredBlocksPresent) {
+        for (int i = 0; i<netstomake.size(); i++) {
+            UUID uuid = createNetworknoscan(netstomake.get(i), 0, world, blockstomakeitwith.get(i), storagestobewithin.get(i), PoweredBlocksPresent.get(i));
+
+            for (BlockPos pos : netstomake.get(i)) {
                 if (world.getBlockEntity(pos) instanceof CopperNetworkerBlockEntity copperbe) {
                     copperbe.SetUUID(uuid);
                 }
+
                 getNetwork(networkuuid).corepos.remove(pos);
             }
         }
@@ -95,25 +95,43 @@ public class Networks {
 
 
 
-
     public UUID createNetwork(BlockPos coreposition, long netpower, ServerWorld world) {
         UUID uuid = UUID.randomUUID();
         Set<BlockPos> corepositions = new HashSet<>();
         corepositions.add(coreposition);
-        Network net = new Network(corepositions, uuid, netpower, world, new HashSet<BlockPos>(), 0L);
+        Network net = new Network(corepositions, uuid, netpower, world, new HashSet<BlockPos>(), 0L, new HashSet<BlockPos>(), new HashSet<>());
         net.scanfromtoadd(coreposition);
         NetworkMap.put(uuid, net);
         return uuid;
     }
-    public UUID createNetworknoscan(Set<BlockPos> coreposition, long netpower, ServerWorld world, Set<BlockPos> blocksinnet) {
+
+
+
+    public UUID createNetworknoscan(Set<BlockPos> coreposition, long netpower, ServerWorld world, Set<BlockPos> blocksinnet, Set<BlockPos> storages, Set<BlockPos> PoweredBlocksPresent) {
         UUID uuid = UUID.randomUUID();
-        Network net = new Network(coreposition, uuid, netpower, world, blocksinnet, 0L);
+        long powercap = 0L;
+        for (BlockPos storage : storages) {
+            if (world.getBlockEntity(storage) instanceof CopperStorageAPI copStorBE) {
+                powercap = powercap + copStorBE.getstoragevalue();
+            }
+        }
+        for (BlockPos storage : storages) {
+            if (world.getBlockEntity(storage) instanceof CopperPowerAPI copPowBE) {
+                copPowBE.setnetUUID(uuid);
+            }
+        }
+        Network net = new Network(coreposition, uuid, netpower, world, blocksinnet, powercap, storages, PoweredBlocksPresent);
         NetworkMap.put(uuid, net);
         for (BlockPos positions : blocksinnet) {
             Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(positions, world), uuid);
         }
         return uuid;
     }
+
+
+
+
+
     public  Network getNetwork(UUID uuid) {
         return NetworkMap.get(uuid);
     }
@@ -123,6 +141,11 @@ public class Networks {
                 if (NetworkMap.get(uuid) != null) {
                     for (BlockPos posits : NetworkMap.get(uuid).blocksinnet) {
                         removeInterestAllAround(new PosWorld(posits, NetworkMap.get(uuid).world), uuid);
+                    }
+                    for (BlockPos positspow : NetworkMap.get(uuid).poweredPos) {
+                        if (NetworkMap.get(uuid).world.getBlockEntity(positspow) instanceof CopperPowerAPI coppow) {
+                            coppow.setnetUUID(null); //is this wise?
+                        }
                     }
                 }
             }
@@ -205,11 +228,34 @@ public class Networks {
             if (towrite.lastIndexOf("&") == towrite.length()-1) {
                 towrite = towrite.substring(0, towrite.length() - 1);
             }
-            towrite = towrite + "," + keyvalueset.getValue().power  + "," + keyvalueset.getValue().networkuuid + "," + keyvalueset.getValue().world.getRegistryKey().getValue() +","+keyvalueset.getValue().storageattached + "#";
+
+            towrite = towrite + "L";
+            for (BlockPos pos : keyvalueset.getValue().storagePos) {
+                towrite = towrite + pos.getX() + "^" + pos.getY() + "^" + pos.getZ() + "C";
+            }
+            if (towrite.lastIndexOf("L") != towrite.length()-1) {
+                towrite = towrite.substring(0, towrite.length() - 1);
+            }
+            towrite = towrite + "L";
+            for (BlockPos pos : keyvalueset.getValue().poweredPos) {
+                towrite = towrite + pos.getX() + "," + pos.getY() + "," + pos.getZ() + "C";
+            }
+            if (towrite.lastIndexOf("L") != towrite.length()-1) {
+                towrite = towrite.substring(0, towrite.length() - 1);
+            }
+            towrite = towrite + "L";
+
+
+            towrite = towrite + keyvalueset.getValue().power  + "," + keyvalueset.getValue().networkuuid + "," + keyvalueset.getValue().world.getRegistryKey().getValue() +","+keyvalueset.getValue().powercapacity + "#";
         }
+
         if (!towrite.isEmpty()) {
             towrite = towrite.substring(0, towrite.length() - 1);
         }
+
+
+
+
         towrite = towrite + "|";
 
         for (PosWorld posworld : interestedblocks) {
@@ -261,19 +307,39 @@ public class Networks {
                                         blocksinnetdata.add(new BlockPos(Integer.parseInt(blockposinnetsplit[0]), Integer.parseInt(blockposinnetsplit[1]), Integer.parseInt(blockposinnetsplit[2])));
                                     }
                                 }
-                            String[] networkmapsplitdataStringpt3 = networkmapsplitdataString[2].split(",");
+
+
+                                Set<BlockPos> storagepos = new HashSet<>();
+                            for (String blocksinnetdatasplit : networkmapsplitdataString[3].split("C")) {
+                                if (!blocksinnetdatasplit.isEmpty()) {
+                                    String[] blockposinnetsplit = blocksinnetdatasplit.split("\\^");
+                                    storagepos.add(new BlockPos(Integer.parseInt(blockposinnetsplit[0]), Integer.parseInt(blockposinnetsplit[1]), Integer.parseInt(blockposinnetsplit[2])));
+                                }
+                            }
+                            Set<BlockPos> powerpos = new HashSet<>();
+                            for (String blocksinnetdatasplit : networkmapsplitdataString[4].split("C")) {
+                                if (!blocksinnetdatasplit.isEmpty()) {
+                                    String[] blockposinnetsplit = blocksinnetdatasplit.split(",");
+                                    powerpos.add(new BlockPos(Integer.parseInt(blockposinnetsplit[0]), Integer.parseInt(blockposinnetsplit[1]), Integer.parseInt(blockposinnetsplit[2])));
+                                }
+                            }
+
+
+
+
+                            String[] networkmapsplitdataStringpt3 = networkmapsplitdataString[5].split(",");
 
                             Set<BlockPos> corepos = new HashSet<>();
-                            for (String coreposstring : networkmapsplitdataStringpt3[0].split("&")) {
+                            for (String coreposstring : networkmapsplitdataString[2].split("&")) {
                                 String[] corepossplitstring =  coreposstring.split("\\.");
                                 corepos.add(new BlockPos(Integer.parseInt(corepossplitstring[0]), Integer.parseInt(corepossplitstring[1]), Integer.parseInt(corepossplitstring[2])));
                             }
 
-                            Long power = Long.parseLong(networkmapsplitdataStringpt3[1]);
-                            UUID networkUUID = UUID.fromString(networkmapsplitdataStringpt3[2]);
-                            ServerWorld networkworld = server.getWorld(RegistryKey.of(RegistryKey.ofRegistry(Identifier.ofVanilla("dimension")), Identifier.of(networkmapsplitdataStringpt3[3])));
-                            long attachedstoragetonet = Long.parseLong(networkmapsplitdataStringpt3[4]);
-                            networkmapdata.put(uuidkey, new Network(corepos, networkUUID, power, networkworld, blocksinnetdata, attachedstoragetonet));
+                            Long power = Long.parseLong(networkmapsplitdataStringpt3[0]);
+                            UUID networkUUID = UUID.fromString(networkmapsplitdataStringpt3[1]);
+                            ServerWorld networkworld = server.getWorld(RegistryKey.of(RegistryKey.ofRegistry(Identifier.ofVanilla("dimension")), Identifier.of(networkmapsplitdataStringpt3[2])));
+                            long attachedstoragetonet = Long.parseLong(networkmapsplitdataStringpt3[3]);
+                            networkmapdata.put(uuidkey, new Network(corepos, networkUUID, power, networkworld, blocksinnetdata, attachedstoragetonet, storagepos, powerpos));
                         }
 
                     Set<PosWorld> interestBlockdata = new HashSet<PosWorld>();

@@ -1,3 +1,4 @@
 {
-  "block.copper-networks.networker_block" : "Networker"
+  "block.copper-networks.networker_block" : "Networker",
+  "block.copper-networks.storage_block" : "Storage"
 }

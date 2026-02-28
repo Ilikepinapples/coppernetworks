@@ -21,11 +21,10 @@ import org.jetbrains.annotations.Nullable;
 public class copperNetworkerBlock extends BlockWithEntity {
     protected copperNetworkerBlock(Settings settings) {
         super(settings);
-        setDefaultState(getDefaultState().with(STORAGE, false));
     }
 
     public static int getLuminance(BlockState state) {
-        return state.get(copperNetworkerBlock.STORAGE) ? 0 : 5;
+        return 5;
     }
     @Override
     protected MapCodec<? extends BlockWithEntity> getCodec() {
@@ -53,12 +52,8 @@ public class copperNetworkerBlock extends BlockWithEntity {
             }
         }
     }
-    public static final BooleanProperty STORAGE = BooleanProperty.of("storage");
 
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(STORAGE);
-    }
+
 
     @Override
     public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
