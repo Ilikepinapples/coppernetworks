@@ -30,14 +30,13 @@ public class Networks {
 
 
 
+//todo THIS save function can be optimised by instead only saving changes thus avoiding massive wait times when saving the world for big networks, also settign stuff to null after saving may be unewscessary so I could ad a check to see if that saving comes from only closing the world
 
 
 
-    //TODO LOOKS LIKE WE'RE MAKING A QUEUE BOYS, should probably tick the queue so every tick it runs all queued and clears the queue
 
 
 
-    //TODO accessor methods for all of this so that operaitons are queued and there is no conficts, maybe no queue is needed if I have an accessor method? like maybe it orders the mehthods by just calling them thorugh an acessor becasue java? once thats done make these private
 
 
 

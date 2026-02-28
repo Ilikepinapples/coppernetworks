@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "copper-networks:networker_block"
+          "name": "copper-networks:storage_block"
         }
       ],
       "conditions": [

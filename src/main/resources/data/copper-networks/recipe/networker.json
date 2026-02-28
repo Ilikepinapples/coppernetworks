@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#R#",
+    "###"
+  ],
+  "key": {
+    "#": "minecraft:copper_block",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "copper-networks:networker_block",
+    "count": 1
+  }
+}
