@@ -6,8 +6,12 @@
     "ccc"
   ],
   "key": {
-    "c": "minecraft:copper_ingot",
-    "i": "minecraft:iron_ingot"
+    "c": {
+      "item": "minecraft:copper_ingot"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
   },
   "result": {
     "id": "copper-networks:storage_block",

@@ -42,9 +42,8 @@ public class CopperNetworkerBlockEntity extends BlockEntity {
 
     public void broken(ServerWorld world) {
         if (Networks.getOrCreateNetworks(world.getServer()).getNetwork(netUUID) != null) {
-            Networks.getOrCreateNetworks(world.getServer()).getNetwork(netUUID).corepos.remove(getPos());
             //Networks.getOrCreateNetworks(world.getServer()).getNetwork(netUUID).scantoremovehanging(getPos());
-            if (Networks.getOrCreateNetworks(world.getServer()).getNetwork(netUUID).corepos.isEmpty()) {
+            if (Networks.getOrCreateNetworks(world.getServer()).getNetwork(netUUID).corepos.size() <= 1) {
                 Networks.getOrCreateNetworks(world.getServer()).removeNetwork(netUUID);
             }
         }

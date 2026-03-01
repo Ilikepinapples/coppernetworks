@@ -94,9 +94,6 @@ public class Network {
 
             for (BlockPos pos : toscanfrom) {
                 if (!blocksinnet.contains(pos.up()) && world.getBlockState(pos.up()).equals(CopperBlockanblockEntities.NETWORKER_BLOCK.getDefaultState())) {
-                    blocksinnet.add(pos.up());
-                    ScanfromNext.add(pos.up());
-                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.up(), world), networkuuid);
                     if (world.getBlockEntity(pos.up()) instanceof CopperNetworkerBlockEntity consumenetnetworker) {
 
                         Set<BlockPos> blockothernet = Networks.getOrCreateNetworks(world.getServer()).getNetwork(((CopperNetworkerBlockEntity) consumenetnetworker).getUUID()).blocksinnet;
@@ -115,9 +112,6 @@ public class Network {
                     }
                 }
                 if (!blocksinnet.contains(pos.down()) && world.getBlockState(pos.down()).equals(CopperBlockanblockEntities.NETWORKER_BLOCK.getDefaultState())) {
-                    blocksinnet.add(pos.down());
-                    ScanfromNext.add(pos.down());
-                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.down(), world), networkuuid);
                     if (world.getBlockEntity(pos.down()) instanceof CopperNetworkerBlockEntity consumenetnetworker) {
 
                         Set<BlockPos> blockothernet = Networks.getOrCreateNetworks(world.getServer()).getNetwork(((CopperNetworkerBlockEntity) consumenetnetworker).getUUID()).blocksinnet;
@@ -136,9 +130,6 @@ public class Network {
                     }
                 }
                 if (!blocksinnet.contains(pos.north()) && world.getBlockState(pos.north()).equals(CopperBlockanblockEntities.NETWORKER_BLOCK.getDefaultState())) {
-                    blocksinnet.add(pos.north());
-                    ScanfromNext.add(pos.north());
-                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.north(), world), networkuuid);
                     if (world.getBlockEntity(pos.north()) instanceof CopperNetworkerBlockEntity consumenetnetworker) {
 
                         Set<BlockPos> blockothernet = Networks.getOrCreateNetworks(world.getServer()).getNetwork(((CopperNetworkerBlockEntity) consumenetnetworker).getUUID()).blocksinnet;
@@ -157,9 +148,6 @@ public class Network {
                     }
                 }
                 if (!blocksinnet.contains(pos.south()) && world.getBlockState(pos.south()).equals(CopperBlockanblockEntities.NETWORKER_BLOCK.getDefaultState())) {
-                    blocksinnet.add(pos.south());
-                    ScanfromNext.add(pos.south());
-                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.south(), world), networkuuid);
                     if (world.getBlockEntity(pos.south()) instanceof CopperNetworkerBlockEntity consumenetnetworker) {
 
                         Set<BlockPos> blockothernet = Networks.getOrCreateNetworks(world.getServer()).getNetwork(((CopperNetworkerBlockEntity) consumenetnetworker).getUUID()).blocksinnet;
@@ -178,9 +166,6 @@ public class Network {
                     }
                 }
                 if (!blocksinnet.contains(pos.east()) && world.getBlockState(pos.east()).equals(CopperBlockanblockEntities.NETWORKER_BLOCK.getDefaultState())) {
-                    blocksinnet.add(pos.east());
-                    ScanfromNext.add(pos.east());
-                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.east(), world), networkuuid);
                     if (world.getBlockEntity(pos.east()) instanceof CopperNetworkerBlockEntity consumenetnetworker) {
 
                         Set<BlockPos> blockothernet = Networks.getOrCreateNetworks(world.getServer()).getNetwork(((CopperNetworkerBlockEntity) consumenetnetworker).getUUID()).blocksinnet;
@@ -199,9 +184,6 @@ public class Network {
                     }
                 }
                 if (!blocksinnet.contains(pos.west()) && world.getBlockState(pos.west()).equals(CopperBlockanblockEntities.NETWORKER_BLOCK.getDefaultState())) {
-                    blocksinnet.add(pos.west());
-                    ScanfromNext.add(pos.west());
-                    Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos.west(), world), networkuuid);
                     if (world.getBlockEntity(pos.west()) instanceof CopperNetworkerBlockEntity consumenetnetworker) {
 
                         Set<BlockPos> blockothernet = Networks.getOrCreateNetworks(world.getServer()).getNetwork(((CopperNetworkerBlockEntity) consumenetnetworker).getUUID()).blocksinnet;
@@ -353,7 +335,7 @@ public class Network {
             }
         }
     }
-
+//todo SO EVERYTHING WORKS BUT INTEREST MAPS ARE LEAVING  TRAILING INTERESTS AFTER MERGING SO NEED TO FI THAT, COPULD JUST CLEAR IT FFROM THE MAP BUT i WANT TO UNDERSTAND WHY PRREFERBALY
 
     public void scantoremovehanging(BlockPos initialpos, BlockState initalblockstate) {
         Set<BlockPos> suredelete = new HashSet<>();
@@ -369,6 +351,10 @@ public class Network {
         //    copPowerpos.setnetUUID(null); //bad idea?
         //    poweredPos.remove(initialpos);
         //}
+        if (corepos.contains(initialpos)) {
+            corepos.remove(initialpos);
+        }
+        suredelete.add(initialpos);
 
 
         Set<BlockPos> upSet = new HashSet<>();
@@ -740,6 +726,7 @@ public class Network {
                             if (world.getBlockState(posstorage).getBlock()  instanceof CopperStorageAPI copstorpos) {
                                 powercapacity = powercapacity - copstorpos.getstoragevalue();
                                 blocksinnet.remove(posstorage);
+                                Networks.getOrCreateNetworks(world.getServer()).removeInterestAllAround(new PosWorld(posstorage, world), networkuuid); //TODO is this nescessarry?
                                 postoremovefromstoragepos.add(posstorage);
                             }
                         }
@@ -751,6 +738,7 @@ public class Network {
                         if (blocktomakepowerset.contains(pospower)) {
                             if (world.getBlockEntity(pospower)  instanceof CopperPowerAPI copPowpos) {
                                 blocksinnet.remove(pospower);
+                                Networks.getOrCreateNetworks(world.getServer()).removeInterestAllAround(new PosWorld(pospower, world), networkuuid);//TODO is this nescessarry?
                                 postoremovefrompowerpos.add(pospower);
                                 copPowpos.setnetUUID(null);
                             }

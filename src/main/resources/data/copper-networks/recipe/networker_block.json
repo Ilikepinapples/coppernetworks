@@ -6,8 +6,12 @@
     "###"
   ],
   "key": {
-    "#": "minecraft:copper_block",
-    "R": "minecraft:redstone"
+    "#": {
+      "item": "minecraft:copper_block"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
   },
   "result": {
     "id": "copper-networks:networker_block",
