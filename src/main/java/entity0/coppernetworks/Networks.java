@@ -93,7 +93,7 @@ public class Networks {
         UUID uuid = UUID.randomUUID();
         Set<BlockPos> corepositions = new HashSet<>();
         corepositions.add(coreposition);
-        Network net = new Network(corepositions, uuid, netpower, world, new HashSet<BlockPos>(), 1000L, new HashSet<BlockPos>(), new HashSet<>());
+        Network net = new Network(corepositions, uuid, netpower, world, new HashSet<BlockPos>(), 0L, new HashSet<BlockPos>(), new HashSet<>());
         net.scanfromtoadd(coreposition);
         NetworkMap.put(uuid, net);
         return uuid;
@@ -102,14 +102,14 @@ public class Networks {
 
     public UUID createNetworknoscan(Set<BlockPos> coreposition, long netpower, ServerWorld world, Set<BlockPos> blocksinnet, Set<BlockPos> storages, Set<BlockPos> PoweredBlocksPresent) {
         UUID uuid = UUID.randomUUID();
-        long powercap = 1000L;
+        long powercap = 0L;
         for (BlockPos storage : storages) {
-            if (world.getBlockEntity(storage) instanceof CopperStorageAPI copStorBE) {
+            if (world.getBlockState(storage).getBlock() instanceof CopperStorageAPI copStorBE) {
                 powercap = powercap + copStorBE.getstoragevalue();
             }
         }
-        for (BlockPos storage : storages) {
-            if (world.getBlockEntity(storage) instanceof CopperPowerAPI copPowBE) {
+        for (BlockPos powerb : PoweredBlocksPresent) {
+            if (world.getBlockEntity(powerb) instanceof CopperPowerAPI copPowBE) {
                 copPowBE.setnetUUID(uuid);
             }
         }
