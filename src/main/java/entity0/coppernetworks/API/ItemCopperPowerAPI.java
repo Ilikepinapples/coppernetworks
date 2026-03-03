@@ -17,35 +17,47 @@ public interface ItemCopperPowerAPI {
     }
 
     default public boolean canGenerate(MinecraftServer server, Long power, BlockPos posoftheitem, ServerWorld world) {
-        UUID uuid = (UUID) getNetworkUUIDS(server, posoftheitem, world).toArray()[0]; //let the gods of the unordered set to array decide the network
-        //null check unescessary as null is technically a valid key but nothing will ever be there so network becomes null anyway
-        Network net = Networks.getOrCreateNetworks(server).getNetwork(uuid);
-        if (net != null) {
-            return (net.powercapacity - net.getPower() >= power);
+        Set<UUID> uuids = getNetworkUUIDS(server, posoftheitem, world);
+        if (uuids != null) {
+            UUID uuid = (UUID) uuids.toArray()[0]; //let the gods of the unordered set to array decide the network
+            //null check unescessary as null is technically a valid key but nothing will ever be there so network becomes null anyway
+            Network net = Networks.getOrCreateNetworks(server).getNetwork(uuid);
+            if (net != null) {
+                return (net.powercapacity - net.getPower() >= power);
+            }
         }
-        return false;
+            return false;
     }
     default public boolean canConsume(MinecraftServer server, long power, BlockPos posoftheitem, ServerWorld world) {
-        UUID uuid = (UUID) getNetworkUUIDS(server, posoftheitem, world).toArray()[0]; //let the gods of the unordered set to array decide the network
-        Network net = Networks.getOrCreateNetworks(server).getNetwork(uuid);
-        if (net != null) {
-            return (net.getPower() >= power);
+        Set<UUID> uuids = getNetworkUUIDS(server, posoftheitem, world);
+        if (uuids != null) {
+            UUID uuid = (UUID) uuids.toArray()[0]; //let the gods of the unordered set to array decide the network
+            Network net = Networks.getOrCreateNetworks(server).getNetwork(uuid);
+            if (net != null) {
+                return (net.getPower() >= power);
+            }
         }
-        return false;
+            return false;
     }
     default public void generate(MinecraftServer server, long power, BlockPos posoftheitem, ServerWorld world) {
-        UUID uuid = (UUID) getNetworkUUIDS(server, posoftheitem, world).toArray()[0]; //let the gods of the unordered set to array decide the network
-        //null check unescessary as null is technically a valid key but nothing will ever be there so network becomes null anyway
-        Network net = Networks.getOrCreateNetworks(server).getNetwork(uuid);
-        if (net != null) {
-            net.setPower(net.getPower() + power);
+        Set<UUID> uuids = getNetworkUUIDS(server, posoftheitem, world);
+        if (uuids != null) {
+            UUID uuid = (UUID) uuids.toArray()[0]; //let the gods of the unordered set to array decide the network
+            //null check unescessary as null is technically a valid key but nothing will ever be there so network becomes null anyway
+            Network net = Networks.getOrCreateNetworks(server).getNetwork(uuid);
+            if (net != null) {
+                net.setPower(net.getPower() + power);
+            }
         }
     }
     default public void consume(MinecraftServer server, long power, BlockPos posoftheitem, ServerWorld world) {
-        UUID uuid = (UUID) getNetworkUUIDS(server, posoftheitem, world).toArray()[0]; //let the gods of the unordered set to array decide the network
-        Network net = Networks.getOrCreateNetworks(server).getNetwork(uuid);
-        if (net != null) {
-            net.setPower(net.getPower() - power);
+        Set<UUID> uuids = getNetworkUUIDS(server, posoftheitem, world);
+        if (uuids != null) {
+            UUID uuid = (UUID) uuids.toArray()[0]; //let the gods of the unordered set to array decide the network
+            Network net = Networks.getOrCreateNetworks(server).getNetwork(uuid);
+            if (net != null) {
+                net.setPower(net.getPower() - power);
+            }
         }
     }
     default public void generateIfCan(MinecraftServer server, long power, BlockPos posoftheitem, ServerWorld world) {
