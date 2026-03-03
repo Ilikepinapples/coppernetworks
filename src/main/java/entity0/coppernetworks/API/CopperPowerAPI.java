@@ -11,8 +11,9 @@ public interface CopperPowerAPI {
     public void setnetUUID (UUID netuuid);
     public UUID getnetUUID ();
     //reminder the server can be gotten from the serverworld
+    //Is this actually any better than just using the item power implementation here too?
     default public boolean canGenerate(MinecraftServer server, Long power) {
-        //TODO make sure that removing networks also removes their ID from powered things connected to them
+        //Is this actually any better than just using the item power implementation here too?
         Network net = Networks.getOrCreateNetworks(server).getNetwork(getnetUUID());
         if (net != null) {
             return (net.powercapacity - net.getPower() >= power);
@@ -43,9 +44,11 @@ public interface CopperPowerAPI {
             generate(server, power);
         }
     }
-    default public void consumeIfCan(MinecraftServer server, long power) {
+    default public boolean consumeIfCan(MinecraftServer server, long power) {
         if (canConsume(server, power)) {
             consume(server, power);
+            return true;
         }
+        return false;
     }
 }
