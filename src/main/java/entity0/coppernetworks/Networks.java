@@ -204,73 +204,116 @@ public class Networks {
     }
 
     public String NetworkString() {
-        String towrite = "";
+        StringBuilder towrite = new StringBuilder();
 
         for (Map.Entry<UUID, Network> keyvalueset : NetworkMap.entrySet()) {
-            towrite = towrite + keyvalueset.getKey().toString() + "L";
+            towrite.append(keyvalueset.getKey().toString());
+            towrite.append("L");
             for (BlockPos pos : keyvalueset.getValue().blocksinnet) {
-                towrite = towrite + pos.getX() + "," + pos.getY() + "," + pos.getZ() + "C";
+                towrite.append(pos.getX());
+                towrite.append(",");
+                towrite.append(pos.getY());
+                towrite.append(",");
+                towrite.append(pos.getZ());
+                towrite.append("C");
             }
             if (towrite.lastIndexOf("L") != towrite.length() - 1) {
-                towrite = towrite.substring(0, towrite.length() - 1);
+                towrite.deleteCharAt(towrite.length()-1);
             }
-            towrite = towrite + "L";
+            towrite.append("L");
             for (BlockPos corepos : keyvalueset.getValue().corepos) {
-                towrite = towrite + corepos.getX() + "." + corepos.getY() + "." + corepos.getZ() + "&";
+                towrite.append(corepos.getX());
+                towrite.append(".");
+                towrite.append( corepos.getY());
+                towrite.append(".");
+                towrite.append( corepos.getZ());
+                towrite.append("&");
             }
             if (towrite.lastIndexOf("&") == towrite.length() - 1) {
-                towrite = towrite.substring(0, towrite.length() - 1);
+                towrite.deleteCharAt(towrite.length()-1);
             }
 
-            towrite = towrite + "L";
+            towrite.append("L");
             for (BlockPos pos : keyvalueset.getValue().storagePos) {
-                towrite = towrite + pos.getX() + "^" + pos.getY() + "^" + pos.getZ() + "C";
+                towrite.append(pos.getX());
+                towrite.append("^");
+                towrite.append(pos.getY());
+                towrite.append("^");
+                towrite.append(pos.getZ());
+                towrite.append("C");
             }
             if (towrite.lastIndexOf("L") != towrite.length() - 1) {
-                towrite = towrite.substring(0, towrite.length() - 1);
+                towrite.deleteCharAt(towrite.length()-1);
             }
-            towrite = towrite + "L";
+            towrite.append("L");
             for (BlockPos pos : keyvalueset.getValue().poweredPos) {
-                towrite = towrite + pos.getX() + "," + pos.getY() + "," + pos.getZ() + "C";
+                towrite.append(pos.getX());
+                towrite.append(",");
+                towrite.append(pos.getY());
+                towrite.append(",");
+                towrite.append(pos.getZ());
+                towrite.append("C");
             }
             if (towrite.lastIndexOf("L") != towrite.length() - 1) {
-                towrite = towrite.substring(0, towrite.length() - 1);
+                towrite.deleteCharAt(towrite.length()-1);
             }
-            towrite = towrite + "L";
+            towrite.append("L");
 
 
-            towrite = towrite + keyvalueset.getValue().power + "," + keyvalueset.getValue().networkuuid + "," + keyvalueset.getValue().world.getRegistryKey().getValue() + "," + keyvalueset.getValue().powercapacity + "#";
+            towrite.append(keyvalueset.getValue().power);
+            towrite.append(",");
+            towrite.append(keyvalueset.getValue().networkuuid);
+            towrite.append(",");
+            towrite.append(keyvalueset.getValue().world.getRegistryKey().getValue());
+            towrite.append(",");
+            towrite.append(keyvalueset.getValue().powercapacity);
+            towrite.append("#");
         }
 
         if (!towrite.isEmpty()) {
-            towrite = towrite.substring(0, towrite.length() - 1);
+            towrite.deleteCharAt(towrite.length()-1);
         }
 
 
-        towrite = towrite + "|";
+        towrite.append("|");
 
         for (PosWorld posworld : interestedblocks) {
-            towrite = towrite + posworld.pos.getX() + "," + posworld.pos.getY() + "," + posworld.pos.getZ() + "," + posworld.world.getRegistryKey().getValue() + "#";
+            towrite.append(posworld.pos.getX());
+            towrite.append("," );
+            towrite.append(posworld.pos.getY());
+            towrite.append(",");
+            towrite.append(posworld.pos.getZ());
+            towrite.append(",");
+            towrite.append(posworld.world.getRegistryKey().getValue());
+            towrite.append("#");
         }
         if (towrite.lastIndexOf("|") != towrite.length() - 1) {
-            towrite = towrite.substring(0, towrite.length() - 1);
+            towrite.deleteCharAt(towrite.length()-1);
         }
-        towrite = towrite + "|";
+        towrite.append("|");
 
         for (Map.Entry<PosWorld, Set<UUID>> keyvalueset : interestNetworkMap.entrySet()) {
-            towrite = towrite + keyvalueset.getKey().pos.getX() + "," + keyvalueset.getKey().pos.getY() + "," + keyvalueset.getKey().pos.getZ() + "," + keyvalueset.getKey().world.getRegistryKey().getValue() + "L";
+            towrite.append(keyvalueset.getKey().pos.getX());
+            towrite.append(",");
+            towrite.append(keyvalueset.getKey().pos.getY());
+            towrite.append("," );
+            towrite.append(keyvalueset.getKey().pos.getZ());
+            towrite.append(",");
+            towrite.append(keyvalueset.getKey().world.getRegistryKey().getValue());
+            towrite.append("L");
             for (UUID uuid : keyvalueset.getValue()) {
-                towrite = towrite + uuid + ",";
+                towrite.append(uuid);
+                towrite.append(",");
             }
-            towrite = towrite.substring(0, towrite.length() - 1);
-            towrite = towrite + "#";
+            towrite.deleteCharAt(towrite.length()-1);
+            towrite.append("#");
         }
         if (towrite.lastIndexOf("|") != towrite.length() - 1) {
-            towrite = towrite.substring(0, towrite.length() - 1);
+            towrite.deleteCharAt(towrite.length()-1);
         }
 
 
-        return towrite;
+        return towrite.toString();
     }
 
     public static Networks getOrCreateNetworks(MinecraftServer server) {
