@@ -60,10 +60,12 @@ public interface ItemCopperPowerAPI {
             }
         }
     }
-    default public void generateIfCan(MinecraftServer server, long power, BlockPos posoftheitem, ServerWorld world) {
+    default public boolean generateIfCan(MinecraftServer server, long power, BlockPos posoftheitem, ServerWorld world) {
         if (canGenerate(server, power, posoftheitem, world)) {
             generate(server, power, posoftheitem, world);
+            return true;
         }
+        return false;
     }
     default public boolean consumeIfCan(MinecraftServer server, long power, BlockPos posoftheitem, ServerWorld world) {
         if (canConsume(server, power, posoftheitem, world)) {

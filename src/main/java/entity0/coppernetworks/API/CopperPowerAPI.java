@@ -39,10 +39,12 @@ public interface CopperPowerAPI {
             net.setPower(net.getPower() - power);
         }
     }
-    default public void generateIfCan(MinecraftServer server, long power) {
+    default public boolean generateIfCan(MinecraftServer server, long power) {
         if (canGenerate(server, power)) {
             generate(server, power);
+            return true;
         }
+        return false;
     }
     default public boolean consumeIfCan(MinecraftServer server, long power) {
         if (canConsume(server, power)) {
