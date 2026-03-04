@@ -65,10 +65,12 @@ public interface ItemCopperPowerAPI {
             generate(server, power, posoftheitem, world);
         }
     }
-    default public void consumeIfCan(MinecraftServer server, long power, BlockPos posoftheitem, ServerWorld world) {
+    default public boolean consumeIfCan(MinecraftServer server, long power, BlockPos posoftheitem, ServerWorld world) {
         if (canConsume(server, power, posoftheitem, world)) {
             consume(server, power, posoftheitem, world);
+            return true;
         }
+        return false;
     }
 }
 
