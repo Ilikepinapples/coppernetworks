@@ -10,6 +10,6 @@ public class storageblock extends Block implements CopperStorageAPI {
 
     @Override
     public long getstoragevalue() {
-        return 500;
+        return 5000;
     }
 }
