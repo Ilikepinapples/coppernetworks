@@ -1,5 +1,6 @@
 package entity0.coppernetworks;
 
+import entity0.coppernetworks.API.CopperPowerAPI;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -62,7 +63,7 @@ public class CopperNetworks implements ModInitializer {
 		changeblockevent.EVENT.register((pos, world, old, newb) -> {
 				if (Networks.getOrCreateNetworks(world.getServer()).ispresentininterest(new PosWorld(pos, world))) {
 					Set<UUID> networks = Set.copyOf(Networks.getOrCreateNetworks(world.getServer()).getInterestedNetworks(new PosWorld(pos, world)));
-					if (newb.isIn(CONDUCTIVEITEMS)) {
+					if (newb.isIn(CONDUCTIVEITEMS) || world.getBlockEntity(pos) instanceof CopperPowerAPI) {
 						for (UUID uuid : networks) {
 							Network net = Networks.getOrCreateNetworks(world.getServer()).getNetwork(uuid);
 							if (net != null) {
