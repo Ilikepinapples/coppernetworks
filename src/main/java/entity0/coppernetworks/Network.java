@@ -746,9 +746,11 @@ public class Network {
                 }
                 poweredPos.removeAll(postoremovefrompowerpos);
                 storagePos.removeAll(postoremovefromstoragepos);
-                Networks.getOrCreateNetworks(world.getServer()).splitnet(networkuuid, netstomake, blockstomakeitwith, world, storagestobewithin, PoweredBlocksPresent);
-                //TODO moved this down so powered blocks don't ge re-nulled
                 scantoremovehanging(initialpos, initalblockstate);
+                //TODO moved this down so powered blocks don't ge re-nulled
+
+                Networks.getOrCreateNetworks(world.getServer()).splitnet(networkuuid, netstomake, blockstomakeitwith, world, storagestobewithin, PoweredBlocksPresent);
+
             }
 
             for (BlockPos pos : blocksinnet) {

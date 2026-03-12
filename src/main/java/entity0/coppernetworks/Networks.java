@@ -77,7 +77,7 @@ public class Networks {
     public void splitnet(UUID networkuuid, List<Set<BlockPos>> netstomake, List<Set<BlockPos>> blockstomakeitwith, ServerWorld world, List<Set<BlockPos>> storagestobewithin, List<Set<BlockPos>> PoweredBlocksPresent) {
         for (int i = 0; i < netstomake.size(); i++) {
             UUID uuid = createNetworknoscan(netstomake.get(i), 0, world, blockstomakeitwith.get(i), storagestobewithin.get(i), PoweredBlocksPresent.get(i));
-
+//TODO seems like some of the stuff is still null but works not sure how
             for (BlockPos pos : netstomake.get(i)) {
                 if (world.getBlockEntity(pos) instanceof CopperNetworkerBlockEntity copperbe) {
                     copperbe.SetUUID(uuid);
