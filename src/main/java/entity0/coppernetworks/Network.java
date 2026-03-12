@@ -50,7 +50,7 @@ public class Network {
     public boolean innet(BlockPos pos) {
         return blocksinnet.contains(pos);
     }
-
+    //TODO could make this scan for block in other nets and not other networkers
     public void scanfromtoadd (BlockPos initialpos) {
         if (world.getBlockState(initialpos).equals(CopperBlockanblockEntities.NETWORKER_BLOCK.getDefaultState())) {
             if (world.getBlockEntity(initialpos) instanceof CopperNetworkerBlockEntity consumenetnetworker) {
@@ -718,7 +718,6 @@ public class Network {
                 blockstomakeitwith.remove(0);
                 storagestobewithin.remove(0);
                 PoweredBlocksPresent.remove(0);
-                Networks.getOrCreateNetworks(world.getServer()).splitnet(networkuuid, netstomake, blockstomakeitwith, world, storagestobewithin, PoweredBlocksPresent);
                 Set<BlockPos> postoremovefromstoragepos = new HashSet<>();
                 for(BlockPos posstorage : storagePos) {
                     for (Set<BlockPos> blocktomakeset : storagestobewithin) {
@@ -747,8 +746,9 @@ public class Network {
                 }
                 poweredPos.removeAll(postoremovefrompowerpos);
                 storagePos.removeAll(postoremovefromstoragepos);
+                Networks.getOrCreateNetworks(world.getServer()).splitnet(networkuuid, netstomake, blockstomakeitwith, world, storagestobewithin, PoweredBlocksPresent);
+                //TODO moved this down so powered blocks don't ge re-nulled
                 scantoremovehanging(initialpos, initalblockstate);
-
             }
 
             for (BlockPos pos : blocksinnet) {

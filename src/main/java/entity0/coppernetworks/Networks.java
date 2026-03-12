@@ -118,6 +118,7 @@ public class Networks {
         for (BlockPos positions : blocksinnet) {
             Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(positions, world), uuid);
         }
+
         return uuid;
     }
 
