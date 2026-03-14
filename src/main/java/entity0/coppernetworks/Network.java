@@ -345,11 +345,9 @@ public class Network {
             powercapacity = powercapacity - copstorpos.getstoragevalue();
             storagePos.remove(initialpos);
         }
-        //if (poweredPos.contains(initialpos) && initalblockstate.getBlock() instanceof CopperPowerAPI copPowerpos) { this hosuld actually be a block entity anyway but also its being broken so no need to clear
-            //not nescessary cuz its already gone so there will be no block entity here
-        //    copPowerpos.setnetUUID(null); //bad idea?
-        //    poweredPos.remove(initialpos);
-        //}
+        if (poweredPos.contains(initialpos)) { //this hosuld actually be a block entity anyway but also its being broken so no need to clear
+           poweredPos.remove(initialpos);
+        }
         if (corepos.contains(initialpos)) {
             corepos.remove(initialpos);
         }
