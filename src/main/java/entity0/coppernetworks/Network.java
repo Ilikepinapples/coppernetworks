@@ -335,7 +335,6 @@ public class Network {
             }
         }
     }
-//todo SO EVERYTHING WORKS BUT INTEREST MAPS ARE LEAVING  TRAILING INTERESTS AFTER MERGING SO NEED TO FI THAT, COPULD JUST CLEAR IT FFROM THE MAP BUT i WANT TO UNDERSTAND WHY PRREFERBALY
 
     public void scantoremovehanging(BlockPos initialpos, BlockState initalblockstate) {
         Set<BlockPos> suredelete = new HashSet<>();
@@ -746,16 +745,24 @@ public class Network {
                 }
                 poweredPos.removeAll(postoremovefrompowerpos);
                 storagePos.removeAll(postoremovefromstoragepos);
-                scantoremovehanging(initialpos, initalblockstate);
-                //TODO moved this down so powered blocks don't ge re-nulled
+                for (Set<BlockPos> blockuss : blockstomakeitwith) {
+                    blocksinnet.removeAll(blockuss);
+                    for (BlockPos pos : blockuss) {
+                        Networks.getOrCreateNetworks(world.getServer()).removeInterestAllAround(new PosWorld(pos, world), networkuuid);
+                    }
 
+                }
                 Networks.getOrCreateNetworks(world.getServer()).splitnet(networkuuid, netstomake, blockstomakeitwith, world, storagestobewithin, PoweredBlocksPresent);
+
+
 
             }
 
             for (BlockPos pos : blocksinnet) {
                 Networks.getOrCreateNetworks(world.getServer()).addInterestAllAround(new PosWorld(pos, world), networkuuid);
             }
+
+
 
     }
 

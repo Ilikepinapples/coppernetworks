@@ -4,6 +4,8 @@ package entity0.coppernetworks;
 
 import entity0.coppernetworks.API.CopperPowerAPI;
 import entity0.coppernetworks.API.CopperStorageAPI;
+import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.command.argument.NbtCompoundArgumentType;
 import net.minecraft.command.argument.packrat.NbtParsingRule;
 import net.minecraft.component.type.NbtComponent;
@@ -65,11 +67,25 @@ public class Networks {
         Network consume = NetworkMap.get(consumenet);
         Network subsume = NetworkMap.get(susbsumenet);
         if (consume != null && subsume != null) {
+            removeNetwork(susbsumenet);
+
             consume.blocksinnet.addAll(subsume.blocksinnet);
+            for (BlockPos postoaddinterest : subsume.blocksinnet) {
+                addInterestAllAround(new PosWorld(postoaddinterest, subsume.world), consume.networkuuid);
+            }
             consume.power = (consume.getPower() + subsume.getPower());
             consume.corepos.addAll(subsume.corepos);
             //this needs all the powered and storage pos and the ascossiated values ? DOES IT ALREADY??? so turns out it scns those parts automatically which is probably cleaner anyway
-            removeNetwork(susbsumenet);
+            consume.powercapacity = consume.powercapacity + subsume.powercapacity;
+            consume.storagePos.addAll(subsume.storagePos);
+            consume.poweredPos.addAll(subsume.poweredPos);
+            for (BlockPos poweredposition : subsume.poweredPos) {
+                if (subsume.world.getBlockEntity(poweredposition) instanceof CopperPowerAPI copPower) {
+                    copPower.setnetUUID(consume.networkuuid);
+                }
+            }
+
+
         }
 
     }
