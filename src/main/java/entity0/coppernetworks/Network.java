@@ -358,24 +358,7 @@ public class Network {
         Set<BlockPos> coreupSet = new HashSet<>();
         Set<BlockPos> upstorageset = new HashSet<>();
         Set<BlockPos> upPowerset = new HashSet<>();
-        for (BlockPos corep : corepos) {
-            Set<BlockPos> scan = scantocore(initialpos.up(), corep);
-            upSet.addAll(scan);
-            if (scan.contains(corep)) {
-                coreupSet.add(corep);
-            }
-            for (BlockPos posofstorage : storagePos) {
-                if (scan.contains(posofstorage)) {
-                    upstorageset.add(posofstorage);
-                }
-            }
-            for (BlockPos posofPower : poweredPos) {
-                if (scan.contains(posofPower)) {
-                    upPowerset.add(posofPower);
-                }
-            }
 
-        }
         Set<BlockPos> downPowerset = new HashSet<>();
 
         Set<BlockPos> northPowerset = new HashSet<>();
@@ -394,112 +377,140 @@ public class Network {
         Set<BlockPos> southstorageset = new HashSet<>();
         Set<BlockPos> eaststorageset = new HashSet<>();
         Set<BlockPos> weststorageset = new HashSet<>();
-
         for (BlockPos corep : corepos) {
-            Set<BlockPos> scan = scantocore(initialpos.down(), corep);
-            downSet.addAll(scan);
-            if (scan.contains(corep)) {
-                coredownSet.add(corep);
-            }
-            for (BlockPos posofstorage : storagePos) {
-                if (scan.contains(posofstorage)) {
-                    downstorageset.add(posofstorage);
+            if (blocksinnet.contains(initialpos.up())) {
+                Set<BlockPos> scan = scantocore(initialpos.up(), corep);
+                upSet.addAll(scan);
+                if (scan.contains(corep)) {
+                    coreupSet.add(corep);
                 }
-            }
-            for (BlockPos posofPower : poweredPos) {
-                if (scan.contains(posofPower)) {
-                    downPowerset.add(posofPower);
+                for (BlockPos posofstorage : storagePos) {
+                    if (scan.contains(posofstorage)) {
+                        upstorageset.add(posofstorage);
+                    }
                 }
-            }
+                for (BlockPos posofPower : poweredPos) {
+                    if (scan.contains(posofPower)) {
+                        upPowerset.add(posofPower);
+                    }
+                }
 
+            }
+        }
+        if (blocksinnet.contains(initialpos.down())) {
+            for (BlockPos corep : corepos) {
+                Set<BlockPos> scan = scantocore(initialpos.down(), corep);
+                downSet.addAll(scan);
+                if (scan.contains(corep)) {
+                    coredownSet.add(corep);
+                }
+                for (BlockPos posofstorage : storagePos) {
+                    if (scan.contains(posofstorage)) {
+                        downstorageset.add(posofstorage);
+                    }
+                }
+                for (BlockPos posofPower : poweredPos) {
+                    if (scan.contains(posofPower)) {
+                        downPowerset.add(posofPower);
+                    }
+                }
+
+            }
         }
         Set<BlockPos> northSet = new HashSet<>();
         Set<BlockPos> corenorthSet = new HashSet<>();
+        if (blocksinnet.contains(initialpos.north())) {
 
-        for (BlockPos corep : corepos) {
-            Set<BlockPos> scan = scantocore(initialpos.north(), corep);
-            northSet.addAll(scan);
-            if (scan.contains(corep)) {
-                corenorthSet.add(corep);
-            }
-            for (BlockPos posofstorage : storagePos) {
-                if (scan.contains(posofstorage)) {
-                    northstorageset.add(posofstorage);
+            for (BlockPos corep : corepos) {
+                Set<BlockPos> scan = scantocore(initialpos.north(), corep);
+                northSet.addAll(scan);
+                if (scan.contains(corep)) {
+                    corenorthSet.add(corep);
                 }
-            }
-            for (BlockPos posofPower : poweredPos) {
-                if (scan.contains(posofPower)) {
-                    northPowerset.add(posofPower);
+                for (BlockPos posofstorage : storagePos) {
+                    if (scan.contains(posofstorage)) {
+                        northstorageset.add(posofstorage);
+                    }
                 }
+                for (BlockPos posofPower : poweredPos) {
+                    if (scan.contains(posofPower)) {
+                        northPowerset.add(posofPower);
+                    }
+                }
+
+
             }
-
-
         }
         Set<BlockPos> southSet = new HashSet<>();
         Set<BlockPos> coresouthSet = new HashSet<>();
+        if (blocksinnet.contains(initialpos.south())) {
 
-        for (BlockPos corep : corepos) {
-            Set<BlockPos> scan = scantocore(initialpos.south(), corep);
-            southSet.addAll(scan);
-            if (scan.contains(corep)) {
-                coresouthSet.add(corep);
-            }
-            for (BlockPos posofstorage : storagePos) {
-                if (scan.contains(posofstorage)) {
-                    southstorageset.add(posofstorage);
+            for (BlockPos corep : corepos) {
+                Set<BlockPos> scan = scantocore(initialpos.south(), corep);
+                southSet.addAll(scan);
+                if (scan.contains(corep)) {
+                    coresouthSet.add(corep);
                 }
-            }
-            for (BlockPos posofPower : poweredPos) {
-                if (scan.contains(posofPower)) {
-                    southPowerset.add(posofPower);
+                for (BlockPos posofstorage : storagePos) {
+                    if (scan.contains(posofstorage)) {
+                        southstorageset.add(posofstorage);
+                    }
                 }
+                for (BlockPos posofPower : poweredPos) {
+                    if (scan.contains(posofPower)) {
+                        southPowerset.add(posofPower);
+                    }
+                }
+
+
             }
-
-
         }
         Set<BlockPos> eastSet = new HashSet<>();
         Set<BlockPos> coreeastSet = new HashSet<>();
+        if (blocksinnet.contains(initialpos.east())) {
 
-        for (BlockPos corep : corepos) {
-            Set<BlockPos> scan = scantocore(initialpos.east(), corep);
-            eastSet.addAll(scan);
-            if (scan.contains(corep)) {
-                coreeastSet.add(corep);
-            }
-            for (BlockPos posofstorage : storagePos) {
-                if (scan.contains(posofstorage)) {
-                    eaststorageset.add(posofstorage);
+            for (BlockPos corep : corepos) {
+                Set<BlockPos> scan = scantocore(initialpos.east(), corep);
+                eastSet.addAll(scan);
+                if (scan.contains(corep)) {
+                    coreeastSet.add(corep);
                 }
-            }
-            for (BlockPos posofPower : poweredPos) {
-                if (scan.contains(posofPower)) {
-                    eastPowerset.add(posofPower);
+                for (BlockPos posofstorage : storagePos) {
+                    if (scan.contains(posofstorage)) {
+                        eaststorageset.add(posofstorage);
+                    }
                 }
+                for (BlockPos posofPower : poweredPos) {
+                    if (scan.contains(posofPower)) {
+                        eastPowerset.add(posofPower);
+                    }
+                }
+
+
             }
-
-
         }
         Set<BlockPos> westSet = new HashSet<>();
         Set<BlockPos> corewestSet = new HashSet<>();
+        if (blocksinnet.contains(initialpos.west())) {
 
-        for (BlockPos corep : corepos) {
-            Set<BlockPos> scan = scantocore(initialpos.west(), corep);
-            westSet.addAll(scan);
-            if (scan.contains(corep)) {
-                corewestSet.add(corep);
-            }
-            for (BlockPos posofstorage : storagePos) {
-                if (scan.contains(posofstorage)) {
-                    weststorageset.add(posofstorage);
+            for (BlockPos corep : corepos) {
+                Set<BlockPos> scan = scantocore(initialpos.west(), corep);
+                westSet.addAll(scan);
+                if (scan.contains(corep)) {
+                    corewestSet.add(corep);
                 }
-            }
-            for (BlockPos posofPower : poweredPos) {
-                if (scan.contains(posofPower)) {
-                    westPowerset.add(posofPower);
+                for (BlockPos posofstorage : storagePos) {
+                    if (scan.contains(posofstorage)) {
+                        weststorageset.add(posofstorage);
+                    }
+                }
+                for (BlockPos posofPower : poweredPos) {
+                    if (scan.contains(posofPower)) {
+                        westPowerset.add(posofPower);
+                    }
                 }
             }
         }
-
 
 
         Set<BlockPos> removeFromStoragePos = new HashSet<>();
